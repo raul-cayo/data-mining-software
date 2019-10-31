@@ -1,4 +1,4 @@
-function bs_input_file() {
+$(function () {
   $(".input-file").before(
     function () {
       if (!$(this).prev().hasClass('input-ghost')) {
@@ -12,16 +12,6 @@ function bs_input_file() {
           element.click();
         });
 
-        $(this).find("button.btn-submit").click(function () {
-          var fileToLoad = document.getElementById("fileToLoad").files[0];
-          var fileReader = new FileReader();
-          fileReader.onload = function (fileLoadedEvent) {
-            var textFromFileLoaded = fileLoadedEvent.target.result;
-            document.getElementById("filetext").value = textFromFileLoaded;
-          };
-          fileReader.readAsText(fileToLoad, "UTF-8");
-        });
-
         $(this).find('input').css("cursor", "pointer");
         $(this).find('input').mousedown(function () {
           $(this).parents('.input-file').prev().click();
@@ -31,8 +21,4 @@ function bs_input_file() {
       }
     }
   );
-}
-
-$(function () {
-  bs_input_file();
 });

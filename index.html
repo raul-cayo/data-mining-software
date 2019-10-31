@@ -13,9 +13,9 @@
   <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
       <a class="nav-item nav-link active" id="nav-input-tab" data-toggle="tab" href="#nav-input">Entrada de Datos</a>
-      <a class="nav-item nav-link disabled" id="nav-analysis-tab" data-toggle="tab" href="#nav-analysis">Análisis Estadístico</a>
+      <a class="nav-item nav-link disabled" id="nav-analysis-tab" data-toggle="tab" href="#nav-analysis">AnálisisEstadístico</a>
       <a class="nav-item nav-link disabled" id="nav-clean-tab" data-toggle="tab" href="#nav-clean">Limpieza de Datos</a>
-      <a class="nav-item nav-link disabled" id="nav-learning-tab" data-toggle="tab" href="#nav-learning">Aprendizaje Máquina</a>
+      <a class="nav-item nav-link disabled" id="nav-learning-tab" data-toggle="tab" href="#nav-learning">AprendizajeMáquina</a>
     </div>
   </nav>
   <div class="tab-content px-5 py-2" id="nav-tabContent">
@@ -29,22 +29,37 @@
           </span>
           <input type="text" class="form-control" placeholder='Archivo...' />
           <span class="input-group-btn">
-            <button class="btn btn-outline-primary btn-submit" type="button" onclick="loadFileAsText()">Subir</button>
+            <button class="btn btn-outline-secondary btn-submit" type="button" onclick="readFile()">Subir</button>
           </span>
         </div>
       </div>
-      <textarea id="filetext" class="form-control" rows="5"></textarea>
+
+      
+      <table class="table table-striped" >
+        <tbody data-bind="foreach: rows">
+          <tr data-bind="foreach: slots()">
+            <td scope="col" class="p-1">
+              <input data-bind="textInput: value" type="text" class="form-control"/>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+
     </div>
 
+    <!-- Otras secciones-->
     <div class="tab-pane fade" id="nav-analysis">Análisis Estadístico</div>
     <div class="tab-pane fade" id="nav-clean">Limpieza de Datos</div>
     <div class="tab-pane fade" id="nav-learning">Aprendizaje Máquina</div>
   </div>
 
   <script src="vendors/jquery.min.js"></script>
+  <script src="vendors/knockout.min.js"></script>
   <script src="vendors/bootstrap.min.js"></script>
-  <script src="vendors/inputfile.js"></script>
-  <script src="js/filereader.js"></script>
+  <script src="vendors/papaparse.min.js"></script>
+  <script src="js/fileinput.js"></script>
+  <script src="js/gridModel.js"></script>
 </body>
 
 </html>
