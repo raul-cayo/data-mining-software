@@ -7,13 +7,14 @@
   <title>Data Mining Software</title>
 
   <link rel="stylesheet" href="vendors/bootstrap.min.css">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
   <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
       <a class="nav-item nav-link active" id="nav-input-tab" data-toggle="tab" href="#nav-input">Entrada de Datos</a>
-      <a class="nav-item nav-link disabled" id="nav-analysis-tab" data-toggle="tab" href="#nav-analysis">AnálisisEstadístico</a>
+      <a class="nav-item nav-link" id="nav-analysis-tab" data-toggle="tab" href="#nav-analysis">AnálisisEstadístico</a>
       <a class="nav-item nav-link disabled" id="nav-clean-tab" data-toggle="tab" href="#nav-clean">Limpieza de Datos</a>
       <a class="nav-item nav-link disabled" id="nav-learning-tab" data-toggle="tab" href="#nav-learning">AprendizajeMáquina</a>
     </div>
@@ -39,13 +40,17 @@
         <tbody data-bind="foreach: rows">
           <tr data-bind="foreach: slots()">
             <td scope="col" class="p-1">
-              <input data-bind="textInput: value" type="text" class="form-control"/>
+              <input data-bind="textInput: value" type="text" class="form-control" placeholder="No se ha subido ningún archivo."/>
             </td>
           </tr>
         </tbody>
       </table>
       
-
+      <div id="actions-input" class="fixed-bottom p-3 d-flex justify-content-center">
+          <button type="button" class="btn btn-primary mx-2">Guardar</button>
+          <button type="button" class="btn btn-primary mx-2">Guardar Como</button>
+          <button type="button" class="btn btn-primary mx-2">Salir</button>
+      </div>
     </div>
 
     <!-- Otras secciones-->
