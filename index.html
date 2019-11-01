@@ -15,8 +15,8 @@
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
       <a class="nav-item nav-link active" id="nav-input-tab" data-toggle="tab" href="#nav-input">Entrada de Datos</a>
       <a class="nav-item nav-link" id="nav-analysis-tab" data-toggle="tab" href="#nav-analysis">AnálisisEstadístico</a>
-      <a class="nav-item nav-link disabled" id="nav-clean-tab" data-toggle="tab" href="#nav-clean">Limpieza de Datos</a>
-      <a class="nav-item nav-link disabled" id="nav-learning-tab" data-toggle="tab" href="#nav-learning">AprendizajeMáquina</a>
+      <a class="nav-item nav-link" id="nav-clean-tab" data-toggle="tab" href="#nav-clean">Limpieza de Datos</a>
+      <a class="nav-item nav-link" id="nav-learning-tab" data-toggle="tab" href="#nav-learning">AprendizajeMáquina</a>
     </div>
   </nav>
   <div class="tab-content px-5 py-2" id="nav-tabContent">
@@ -46,10 +46,10 @@
         </tbody>
       </table>
       
-      <div id="actions-input" class="fixed-bottom p-3 d-flex justify-content-center">
-          <button type="button" class="btn btn-primary mx-2">Guardar</button>
-          <button type="button" class="btn btn-primary mx-2">Guardar Como</button>
-          <button type="button" class="btn btn-primary mx-2">Salir</button>
+      <div id="actions-input" class="bg-white border-top border-primary fixed-bottom p-3 d-flex justify-content-center">
+          <button type="button" class="btn btn-outline-primary mx-2">Guardar</button>
+          <button type="button" class="btn btn-outline-primary mx-2">Guardar Como</button>
+          <button type="button" class="btn btn-outline-primary mx-2">Salir</button>
       </div>
     </div>
 
@@ -65,6 +65,12 @@
   <script src="vendors/papaparse.min.js"></script>
   <script src="js/fileinput.js"></script>
   <script src="js/gridModel.js"></script>
+  <script>
+    window.addEventListener('beforeunload', function (e) {
+      e.preventDefault();
+      e.returnValue = '';
+    });
+  </script>
 </body>
 
 </html>

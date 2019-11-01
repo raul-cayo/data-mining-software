@@ -1,4 +1,11 @@
+/*
+  #1E2640 Primary
+  #2C9240 Success
+  #F3EAC0 Info
+  #DC9750 Warning
+  #922C40 Danger
+*/
 
-#actions-input {
-  background-color: #7F9FAC;
+tbody tr:first-child {
+  background-color: #DC9750;
 }

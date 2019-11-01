@@ -10,7 +10,8 @@ function readFile() {
     ko.applyBindings(new GridViewModel());
 
     var firstRow = document.querySelector('table tr:first-child');
-    firstRow.style.backgroundColor = "#FFBFA6";
+    firstRow.style.borderWidth = "2px";
+    firstRow.classList.add("bg-secondary");
   };
 
   fileReader.readAsText(fileToLoad, "UTF-8");
