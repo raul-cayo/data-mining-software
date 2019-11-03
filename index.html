@@ -21,7 +21,7 @@
   </nav>
   <div class="tab-content px-5 py-2" id="nav-tabContent">
 
-    <!-- Entrada de Datos -->
+    <!-- ENTRADAD DE DATOS -->
     <div class="tab-pane fade show active" id="nav-input">
       <div class="form-group">
         <div class="input-group input-file" name="Fichier1">
@@ -34,22 +34,46 @@
           </span>
         </div>
       </div>
-
       
-      <table class="table table-striped" >
+      <!-- Grid -->
+      <table class="table table-striped">
         <tbody data-bind="foreach: rows">
           <tr data-bind="foreach: slots()">
             <td scope="col" class="p-1">
-              <input data-bind="textInput: value" type="text" class="form-control" placeholder="No se ha subido ningún archivo."/>
+              <input data-bind="textInput: value" type="text" class="form-control" placeholder="No se ha subido ningún archivo." disabled/>
             </td>
           </tr>
         </tbody>
       </table>
       
+      <!-- Actions -->
       <div id="actions-input" class="bg-white border-top border-primary fixed-bottom p-3 d-flex justify-content-center">
-          <button type="button" class="btn btn-outline-primary mx-2">Guardar</button>
-          <button type="button" class="btn btn-outline-primary mx-2">Guardar Como</button>
-          <button type="button" class="btn btn-outline-primary mx-2">Salir</button>
+          <button id="btn-save" type="button" class="btn btn-outline-primary mx-2" onClick="saveFile(fileName, fileExt)" disabled>Guardar</button>
+          <button id="btn-saveAs" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal" data-target="#myModal" disabled>Guardar Como</button>
+      </div>
+
+      <!-- The Modal -->
+      <div class="modal" id="myModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Guardar Como</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control mb-2" placeholder="Nombre del archivo" />
+                <select class="form-control">
+                  <option value=".csv">CSV</option>
+                  <option value=".data">Data</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-primary" >Guardar</button>
+              <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancelar</button>
+            </div>
+      
+          </div>
+        </div>
       </div>
     </div>
 
@@ -63,13 +87,15 @@
   <script src="vendors/knockout.min.js"></script>
   <script src="vendors/bootstrap.min.js"></script>
   <script src="vendors/papaparse.min.js"></script>
+  <script src="vendors/FileSaver.min.js"></script>
   <script src="js/fileinput.js"></script>
   <script src="js/gridModel.js"></script>
+  
   <script>
-    window.addEventListener('beforeunload', function (e) {
+    /* window.addEventListener('beforeunload', function (e) {
       e.preventDefault();
       e.returnValue = '';
-    });
+    }); */
   </script>
 </body>
 

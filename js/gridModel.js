@@ -1,20 +1,45 @@
+let fileName = "";
+let fileExt = "";
+let vm, data;
 
 function readFile() {
-  var fileToLoad = document.getElementById("fileToLoad").files[0];
-  var fileReader = new FileReader();
+  let fileToLoad = document.getElementById("fileToLoad").files[0];
+  let fileReader = new FileReader();
+  let fileArr = fileToLoad.name.split(".");
+  fileName = fileArr[0];
+  fileExt = "." + fileArr[1];
 
   fileReader.onload = function (event) {
-    var textFromFileLoaded = event.target.result;
+    let textFromFileLoaded = event.target.result;
     data = Papa.parse(textFromFileLoaded).data;
-    
-    ko.applyBindings(new GridViewModel());
 
-    var firstRow = document.querySelector('table tr:first-child');
+    document.querySelector("#btn-save").removeAttribute("disabled");
+    document.querySelector("#btn-saveAs").removeAttribute("disabled");
+    document.querySelector("td input").removeAttribute("disabled");
+    
+    ko.applyBindings(vm = new GridViewModel());
+
+    let firstRow = document.querySelector('table tr:first-child');
     firstRow.style.borderWidth = "2px";
     firstRow.classList.add("bg-secondary");
   };
 
   fileReader.readAsText(fileToLoad, "UTF-8");
+}
+
+function saveFile(name, ext) {
+  data = [];
+  for (let row of vm.rows()) {
+    let slotsArray = [];
+    for (let slot of row.slots()) {
+      slotsArray.push(slot.value());
+    }
+    data.push(slotsArray);
+  }
+
+  let content = Papa.unparse(data);
+  let blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+  saveAs(blob, name + ext);
 }
 
 /* MODEL DEFINITION */
