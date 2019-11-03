@@ -14,9 +14,9 @@
   <nav>
     <div class="nav nav-tabs" id="nav-tab" role="tablist">
       <a class="nav-item nav-link active" id="nav-input-tab" data-toggle="tab" href="#nav-input">Entrada de Datos</a>
-      <a class="nav-item nav-link" id="nav-analysis-tab" data-toggle="tab" href="#nav-analysis">AnálisisEstadístico</a>
+      <a class="nav-item nav-link" id="nav-analysis-tab" data-toggle="tab" href="#nav-analysis">Análisis Estadístico</a>
       <a class="nav-item nav-link" id="nav-clean-tab" data-toggle="tab" href="#nav-clean">Limpieza de Datos</a>
-      <a class="nav-item nav-link" id="nav-learning-tab" data-toggle="tab" href="#nav-learning">AprendizajeMáquina</a>
+      <a class="nav-item nav-link" id="nav-learning-tab" data-toggle="tab" href="#nav-learning">Aprendizaje Máquina</a>
     </div>
   </nav>
   <div class="tab-content px-5 py-2" id="nav-tabContent">
@@ -37,10 +37,10 @@
       
       <!-- Grid -->
       <table class="table table-striped">
-        <tbody data-bind="foreach: rows">
+        <tbody data-bind="foreach: grid">
           <tr data-bind="foreach: slots()">
             <td scope="col" class="p-1">
-              <input data-bind="textInput: value" type="text" class="form-control" disabled/>
+              <input data-bind="textInput: value" type="text" class="form-control"/>
             </td>
           </tr>
         </tbody>
@@ -48,8 +48,10 @@
       
       <!-- Actions -->
       <div id="actions-input" class="bg-white border-top border-primary fixed-bottom p-3 d-flex justify-content-center">
-          <button id="btn-save" type="button" class="btn btn-outline-primary mx-2" onClick="saveFile(fileName, fileExt)" disabled>Guardar</button>
-          <button id="btn-saveAs" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal" data-target="#myModal" disabled>Guardar Como</button>
+        <button id="btn-save" type="button" class="btn btn-outline-primary mx-2" 
+          onClick="saveFile(vm.fileName(), vm.fileExt())" data-bind="enable: fileName">Guardar</button>
+        <button id="btn-saveAs" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal" 
+          data-target="#myModal" data-bind="enable: fileName">Guardar Como</button>
       </div>
 
       <!-- The Modal -->
@@ -88,8 +90,10 @@
   <script src="vendors/bootstrap.min.js"></script>
   <script src="vendors/papaparse.min.js"></script>
   <script src="vendors/FileSaver.min.js"></script>
-  <script src="js/fileinput.js"></script>
-  <script src="js/gridModel.js"></script>
+
+  <script src="js/components/fileinput.js"></script>
+  <script src="js/DataViewModel.js"></script>
+  <script src="js/EntradaDatos.js"></script>
   
   <script>
     /* window.addEventListener('beforeunload', function (e) {
