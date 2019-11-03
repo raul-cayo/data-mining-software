@@ -40,7 +40,7 @@
         <tbody data-bind="foreach: rows">
           <tr data-bind="foreach: slots()">
             <td scope="col" class="p-1">
-              <input data-bind="textInput: value" type="text" class="form-control" placeholder="No se ha subido ningún archivo." disabled/>
+              <input data-bind="textInput: value" type="text" class="form-control" disabled/>
             </td>
           </tr>
         </tbody>
@@ -68,7 +68,7 @@
                 </select>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary" >Guardar</button>
+              <button type="button" class="btn btn-outline-primary" onClick="saveFileFromModal()">Guardar</button>
               <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancelar</button>
             </div>
       

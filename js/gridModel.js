@@ -28,6 +28,7 @@ function readFile() {
 }
 
 function saveFile(name, ext) {
+  // TODO: Check file extension
   data = [];
   for (let row of vm.rows()) {
     let slotsArray = [];
@@ -40,6 +41,17 @@ function saveFile(name, ext) {
   let content = Papa.unparse(data);
   let blob = new Blob([content], { type: "text/plain;charset=utf-8" });
   saveAs(blob, name + ext);
+}
+
+function saveFileFromModal() {
+  let name = document.querySelector('.modal-body input').value;
+  let ext = document.querySelector('.modal-body select').value;
+
+  if (!name) {
+    document.querySelector('.modal-body input').classList.add("border", "border-danger");
+  } else {
+    saveFile(name, ext);
+  }
 }
 
 /* MODEL DEFINITION */
