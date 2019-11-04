@@ -12,7 +12,7 @@ function readFile() {
     vm.updateData(data);
 
     let firstRow = document.querySelector('table tr:first-child');
-    firstRow.classList.add("bg-secondary");
+    //firstRow.classList.add("bg-secondary");
   };
 
   fileReader.readAsText(fileToLoad, "UTF-8");

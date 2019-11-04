@@ -39,12 +39,11 @@
       <table class="table table-striped">
         <tbody data-bind="foreach: grid">
           <tr data-bind="foreach: slots()">
-            <td data-bind="if: $parentContext.$index() && !$index()" scope="col" class="p-1">
-              <button type="button" class="btn btn-outline-info" data-toggle="modal" 
+            <td data-bind="if: $parentContext.$index() && !$index()" class="p-1">
+              <button type="button" class="btn btn-outline-info" data-toggle="modal"
                 data-bind="attr: { 'data-target': '#instanceModal' + $parentContext.$index() }">
                 <span data-bind="text: $parentContext.$index()"></span>
               </button>
-
               <div class="modal" data-bind="attr: { id: 'instanceModal' + $parentContext.$index() } ">
                 <div class="modal-dialog">
                   <div class="modal-content">
@@ -58,10 +57,31 @@
                   </div>
                 </div>
               </div>
-
             </td>
-            <td scope="col" class="p-1">
-              <input data-bind="textInput: value" type="text" class="form-control" />
+
+            <td class="p-1">
+              <div data-bind="if: $parentContext.$index()">
+                <input data-bind="textInput: value" type="text" class="form-control" />
+              </div>
+              <div data-bind="ifnot: $parentContext.$index()">
+                <button type="button" class="btn btn-outline-info" data-toggle="modal"
+                  data-bind="attr: { 'data-target': '#attr' + $index() }">
+                  <span data-bind="text: value"></span>
+                </button>
+                <div class="modal" data-bind="attr: { id: 'attr' + $index() } ">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title" data-bind="text: 'Atributo ' + value()"></h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Eliminar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </td>
           </tr>
         </tbody>
