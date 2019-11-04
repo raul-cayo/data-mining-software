@@ -33,13 +33,13 @@ function saveFile(name, ext) {
 }
 
 function saveFileFromModal() {
-  let name = document.querySelector('.modal-body input').value;
-  let ext = document.querySelector('.modal-body select').value;
+  let name = document.querySelector('#saveAs-body input').value;
+  let ext = document.querySelector('#saveAs-body select').value;
 
   if (!name) {
-    document.querySelector('.modal-body input').classList.add("border", "border-danger");
+    document.querySelector('#saveAs-body input').classList.add("border", "border-danger");
   } else {
     saveFile(name, ext);
-    document.querySelector('.modal-body input').classList.add("border", "border-success");
+    document.querySelector('#saveAs-body input').classList.add("border", "border-success");
   }
 }
