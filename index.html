@@ -39,6 +39,11 @@
       <table class="table table-striped">
         <tbody data-bind="foreach: grid">
           <tr data-bind="foreach: slots()">
+            <td data-bind="if: $parentContext.$index() && !$index()" scope="col" class="p-1">
+              <button type="button" class="btn btn-outline-info">
+                <span data-bind="text: $parentContext.$index()"></span>
+              </button>
+            </td>
             <td scope="col" class="p-1">
               <input data-bind="textInput: value" type="text" class="form-control"/>
             </td>
