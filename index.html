@@ -63,7 +63,7 @@
               <div data-bind="if: $parentContext.$index()">
                 <input data-bind="textInput: value" type="text" class="form-control" />
               </div>
-              <div data-bind="ifnot: $parentContext.$index()">
+              <div data-bind="ifnot: $parentContext.$index()" class="d-flex justify-content-center">
                 <button type="button" class="btn btn-outline-info" data-toggle="modal"
                   data-bind="attr: { 'data-target': '#attr' + $index() }">
                   <span data-bind="text: value"></span>

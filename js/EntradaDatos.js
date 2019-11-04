@@ -10,9 +10,6 @@ function readFile() {
     let data = Papa.parse(textFromFileLoaded).data;
     
     vm.updateData(data);
-
-    let firstRow = document.querySelector('table tr:first-child');
-    //firstRow.classList.add("bg-secondary");
   };
 
   fileReader.readAsText(fileToLoad, "UTF-8");
