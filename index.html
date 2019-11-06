@@ -62,7 +62,10 @@
 
             <td class="p-1">
               <div data-bind="if: $parentContext.$index()">
-                <input data-bind="textInput: value" type="text" class="form-control border border-danger" />
+                <input data-bind="textInput: value, 
+                  class: regexStatus" 
+                  type="text" 
+                  class="form-control border" />
               </div>
 
               <div data-bind="ifnot: $parentContext.$index()" class="d-flex justify-content-center">
@@ -79,12 +82,14 @@
                       </div>
                       <div class="modal-body">
                         <input data-bind="textInput: value" type="text" class="form-control" />
-                        <label class="mt-3">Regex</label>
-                        <input data-bind="textInput: $root.regex()[$index()].value" type="text" class="form-control" placeholder="Ej. ^[A-Z]{3}$" />
+                        <label class="mt-3">Regex (  <span data-bind="text: regex"></span>  )</label>
+                        <input data-bind="textInput: $root.attrRegex()[$index()].value" type="text" class="form-control" placeholder="Ej. ^[A-Z]{3}$" />
                       </div>
                       <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-primary"
+                          data-bind="click: () => $root.updateRegex($index())">Aplicar Regex</button>
                         <button type="button" class="btn btn-outline-danger"
-                        data-bind="click: () => $root.deleteAttr($index())">Eliminar</button>
+                          data-bind="click: () => $root.deleteAttr($index())">Eliminar</button>
                       </div>
                     </div>
                   </div>

@@ -3,6 +3,11 @@
 function Slot(value) {
   var self = this;
   self.value = ko.observable(value);
+  self.regex = ko.observable('\\w{2}');
+
+  self.regexStatus = ko.pureComputed(function(){
+    return self.value().match(new RegExp(self.regex())) ? '' : 'border-danger';
+  }, self);
 }
 
 function Row(slots) {
@@ -13,7 +18,7 @@ function Row(slots) {
 function DataViewModel() {
   var self = this;
   self.grid = ko.observableArray([]);
-  self.regex = ko.observableArray([]);
+  self.attrRegex = ko.observableArray([]);
   self.fileName = ko.observable("");
   self.fileExt = ko.observable("");
 
@@ -23,9 +28,16 @@ function DataViewModel() {
       let slotsArray = [];
       for (let value of row) {
         slotsArray.push(new Slot(value));
-        self.regex.push(new Slot(""));
+        self.attrRegex.push(new Slot('\\w{2}'));
       }
       self.grid.push(new Row(slotsArray));
+    }
+  }
+
+  self.updateRegex = function(index) {
+    for (let row of self.grid()) {
+      let newRegex = self.attrRegex()[index].value();
+      row.slots()[index].regex(newRegex);
     }
   }
 
@@ -38,6 +50,7 @@ function DataViewModel() {
     for (let row of self.grid()) {
       row.slots.splice(index, 1);
     }
+    self.attrRegex.splice(index, 1);
     document.querySelector(".modal-backdrop.show").remove();
   }
 }
