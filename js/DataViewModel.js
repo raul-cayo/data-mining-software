@@ -10,6 +10,15 @@ function Slot(value) {
   }, self);
 }
 
+function AttributeInfo(regex) {
+  var self = this;
+  self.regex = ko.observable(regex);
+  self.type = ko.observable('categoric');
+  self.noMissingValues;
+  self.percentMissing;
+  self.noBadValues;
+}
+
 function Row(slots) {
   var self = this;
   self.slots = ko.observableArray(slots);
@@ -18,17 +27,23 @@ function Row(slots) {
 function DataViewModel() {
   var self = this;
   self.grid = ko.observableArray([]);
-  self.attrRegex = ko.observableArray([]);
+  self.attributesInfo = ko.observableArray([]);
   self.fileName = ko.observable("");
   self.fileExt = ko.observable("");
+  self.name;
+  self.noInstances;
+  self.noAttributes;
+  self.totalMissingValues;
+  self.totalPercentMissing;
 
-  self.updateData = function(data) {
+
+  self.loadData = function(data) {
     self.grid.splice(0);
     for (let row of data) {
       let slotsArray = [];
       for (let value of row) {
         slotsArray.push(new Slot(value));
-        self.attrRegex.push(new Slot('\\w{2}'));
+        self.attributesInfo.push(new AttributeInfo('\\w{2}'));
       }
       self.grid.push(new Row(slotsArray));
     }
@@ -36,10 +51,13 @@ function DataViewModel() {
 
   self.updateRegex = function(index) {
     for (let row of self.grid()) {
-      let newRegex = self.attrRegex()[index].value();
+      let newRegex = self.attributesInfo()[index].regex();
       row.slots()[index].regex(newRegex);
     }
   }
+
+  // TODO: Funtion to update atrrs info
+  //self.updateInfo = ko.pureComputed();
 
   self.deleteInstance = function(index) {
     self.grid.splice(index, 1);
@@ -50,7 +68,7 @@ function DataViewModel() {
     for (let row of self.grid()) {
       row.slots.splice(index, 1);
     }
-    self.attrRegex.splice(index, 1);
+    self.attributesInfo.splice(index, 1);
     document.querySelector(".modal-backdrop.show").remove();
   }
 }

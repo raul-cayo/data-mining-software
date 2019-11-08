@@ -35,6 +35,8 @@
         </div>
       </div>
 
+      <!-- Data Info -->
+
       <!-- Grid -->
       <table class="table table-striped">
         <tbody data-bind="foreach: grid">
@@ -83,7 +85,7 @@
                       <div class="modal-body">
                         <input data-bind="textInput: value" type="text" class="form-control" />
                         <label class="mt-3">Regex (  <span data-bind="text: regex"></span>  )</label>
-                        <input data-bind="textInput: $root.attrRegex()[$index()].value" type="text" class="form-control" placeholder="Ej. ^[A-Z]{3}$" />
+                        <input data-bind="textInput: $root.attributesInfo()[$index()].regex" type="text" class="form-control" placeholder="Ej. ^[A-Z]{3}$" />
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary"
@@ -131,7 +133,7 @@
       </div>
     </div>
 
-    <!-- Otras secciones-->
+    <!-- Other sections-->
     <div class="tab-pane fade" id="nav-analysis">Análisis Estadístico</div>
     <div class="tab-pane fade" id="nav-clean">Limpieza de Datos</div>
     <div class="tab-pane fade" id="nav-learning">Aprendizaje Máquina</div>

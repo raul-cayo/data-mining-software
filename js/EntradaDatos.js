@@ -9,7 +9,7 @@ function readFile() {
     let textFromFileLoaded = event.target.result;
     let data = Papa.parse(textFromFileLoaded).data;
     
-    vm.updateData(data);
+    vm.loadData(data);
   };
 
   fileReader.readAsText(fileToLoad, "UTF-8");
