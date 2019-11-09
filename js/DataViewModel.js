@@ -30,18 +30,38 @@ function DataViewModel() {
   self.attributesInfo = ko.observableArray([]);
   self.fileName = ko.observable("");
   self.fileExt = ko.observable("");
-  // TODO: variables
   self.name = ko.observable("Datos");
-  self.noInstances = ko.pureComputed(function(){
+
+  // Computed values
+  self.noInstances = ko.pureComputed(function() {
     return self.grid().length - 1;
   }, self);
-  self.noAttributes = ko.pureComputed(function(){
+
+  self.noAttributes = ko.pureComputed(function() {
     return self.attributesInfo().length;
   }, self);
-  self.totalMissingValues;
-  self.totalPercentMissing;
 
+  self.totalMissingValues = ko.pureComputed(function() {
+    let totalMissing = 0;
+    for (let row of self.grid()) {
+      for (let slot of row.slots()) {
+        if (!slot.value()) {
+          totalMissing++;
+        }
+      }
+    }
+    return totalMissing;
+  }, self);
 
+  self.totalPercentMissing = ko.pureComputed(function() {
+    console.log(self.totalMissingValues());
+    console.log(self.noInstances());
+    console.log(self.noAttributes());
+
+    return (self.totalMissingValues() * 100 / (self.noInstances() * self.noAttributes())).toFixed(2);
+  }, self);
+
+  // Funtions
   self.loadData = function(data) {
     for (let i = 0; i < data[0].length; i++) {
       console.log(i);
