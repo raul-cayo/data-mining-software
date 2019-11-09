@@ -30,20 +30,29 @@ function DataViewModel() {
   self.attributesInfo = ko.observableArray([]);
   self.fileName = ko.observable("");
   self.fileExt = ko.observable("");
-  self.name;
-  self.noInstances;
-  self.noAttributes;
+  // TODO: variables
+  self.name = ko.observable("Datos");
+  self.noInstances = ko.pureComputed(function(){
+    return self.grid().length - 1;
+  }, self);
+  self.noAttributes = ko.pureComputed(function(){
+    return self.attributesInfo().length;
+  }, self);
   self.totalMissingValues;
   self.totalPercentMissing;
 
 
   self.loadData = function(data) {
+    for (let i = 0; i < data[0].length; i++) {
+      console.log(i);
+      self.attributesInfo.push(new AttributeInfo('\\w{2}'));
+    }
+
     self.grid.splice(0);
     for (let row of data) {
       let slotsArray = [];
       for (let value of row) {
         slotsArray.push(new Slot(value));
-        self.attributesInfo.push(new AttributeInfo('\\w{2}'));
       }
       self.grid.push(new Row(slotsArray));
     }
@@ -57,7 +66,7 @@ function DataViewModel() {
   }
 
   // TODO: Funtion to update atrrs info
-  //self.updateInfo = ko.pureComputed();
+  //self.updateAttrInfo;
 
   self.deleteInstance = function(index) {
     self.grid.splice(index, 1);
