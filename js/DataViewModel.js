@@ -1,4 +1,4 @@
-/* MODEL DEFINITION */
+/* ***** MODEL DEFINITION ***** */
 
 function Slot(value) {
   var self = this;
@@ -12,11 +12,11 @@ function Slot(value) {
 
 function AttributeInfo(regex) {
   var self = this;
-  self.regex = ko.observable(regex);
-  self.type = ko.observable('categoric');
-  self.noMissingValues;
-  self.percentMissing;
-  self.noBadValues;
+  self.regex = ko.observable(regex); // default value
+  self.type = ko.observable('Categórico'); // default value
+  self.noMissingValues = ko.observable(0);
+  self.percentMissing = ko.observable(0);
+  self.noBadValues = ko.observable(0);
 }
 
 function Row(slots) {
@@ -28,11 +28,12 @@ function DataViewModel() {
   var self = this;
   self.grid = ko.observableArray([]);
   self.attributesInfo = ko.observableArray([]);
-  self.fileName = ko.observable("");
-  self.fileExt = ko.observable("");
-  self.name = ko.observable("Datos");
+  self.fileName = ko.observable('');
+  self.fileExt = ko.observable('');
+  self.name = ko.observable('Datos');  // default value
+  self.valueTypeOptions = ['Categórico', 'Numérico'];
 
-  // Computed values
+  // *** Computed values ***
   self.noInstances = ko.pureComputed(function() {
     return self.grid().length - 1;
   }, self);
@@ -54,18 +55,15 @@ function DataViewModel() {
   }, self);
 
   self.totalPercentMissing = ko.pureComputed(function() {
-    console.log(self.totalMissingValues());
-    console.log(self.noInstances());
-    console.log(self.noAttributes());
-
-    return (self.totalMissingValues() * 100 / (self.noInstances() * self.noAttributes())).toFixed(2);
+    let percent = self.totalMissingValues() * 100 / (self.noInstances() * self.noAttributes());
+    return percent.toFixed(2);
   }, self);
 
-  // Funtions
+  // *** Functions ***
   self.loadData = function(data) {
+    // TODO: read metadata from .data and add defaults
     for (let i = 0; i < data[0].length; i++) {
-      console.log(i);
-      self.attributesInfo.push(new AttributeInfo('\\w{2}'));
+      self.attributesInfo.push(new AttributeInfo('\\w{2}')); // default value
     }
 
     self.grid.splice(0);
@@ -85,12 +83,26 @@ function DataViewModel() {
     }
   }
 
-  // TODO: Funtion to update atrrs info
-  //self.updateAttrInfo;
+  self.updateAttrInfo = function(index) {
+    let countMissing = 0;
+    let countBad = 0;
 
-  self.deleteInstance = function(index) {
-    self.grid.splice(index, 1);
-    document.querySelector(".modal-backdrop.show").remove();
+    for (var i = 1; i < self.grid().length; i++) {
+      let missingValue = self.grid()[i].slots()[index].value() === '' ? true : false;
+      let badValue = self.grid()[i].slots()[index].regexStatus() === '' ? false : true;
+
+      if (missingValue) {
+        countMissing++;
+      } else if (badValue) {
+        countBad++;
+      }
+    }
+
+    let percentMissing = countMissing * 100 / self.noInstances();
+
+    self.attributesInfo()[index].noMissingValues(countMissing);
+    self.attributesInfo()[index].percentMissing(percentMissing.toFixed(2));
+    self.attributesInfo()[index].noBadValues(countBad);
   }
 
   self.deleteAttr = function(index) {
@@ -98,7 +110,12 @@ function DataViewModel() {
       row.slots.splice(index, 1);
     }
     self.attributesInfo.splice(index, 1);
-    document.querySelector(".modal-backdrop.show").remove();
+    document.querySelector('.modal-backdrop.show').remove();
+  }
+
+  self.deleteInstance = function(index) {
+    self.grid.splice(index, 1);
+    document.querySelector('.modal-backdrop.show').remove();
   }
 }
 
