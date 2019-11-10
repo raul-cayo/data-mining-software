@@ -41,7 +41,7 @@ function readFile() {
             });
           }
           if (line.slice(1, 13) === 'missingValue') {
-            options.missingValue = line.slice(14);
+            options.nullChar = line.slice(14);
           }
           if (line.slice(1, 5) === 'data') {
             dataText = dataText.slice(0, -1) + '\n';
@@ -104,4 +104,19 @@ function saveFileFromModal() {
     saveFile(fileName, fileExt);
     document.querySelector('#saveAs-body input').classList.add('border', 'border-success');
   }
+}
+
+function addAttributeFromModal() {
+  let attrName = document.querySelector('#addAttr-body .attr-name').value;
+  let attrRegex = document.querySelector('#addAttr-body .attr-regex').value;
+  let attrType = document.querySelector('#addAttr-body .attr-type').value;
+  let attrDefault = vm.fileExt === '.csv' ? document.querySelector('#addAttr-body .attr-default').value : '';
+
+  vm.addAttr(attrName, attrRegex, attrType, attrDefault);
+}
+
+function addInstanceFromModal() {
+  let instanceDefault = document.querySelector('#addInstance-body input').value;
+
+  vm.addInstance(instanceDefault);
 }

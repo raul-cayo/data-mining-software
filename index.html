@@ -153,10 +153,16 @@
       <!-- *** Actions *** -->
       <div id="actions-input" class="bg-white border-top border-dark fixed-bottom p-3 d-flex justify-content-around">
         <div>
-          <button id="btn-addAttr" type="button" class="btn btn-outline-primary mx-2"
-            data-target="#" data-bind="enable: fileName">Agregar Atributo</button>
-          <button id="btn-addInstance" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
-            data-target="#" data-bind="enable: fileName">Agregar Instancia</button>
+          <button id="btn-addAttr" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
+            data-target="#addAttr-modal" data-bind="enable: fileName">Agregar Atributo</button>
+          <div data-bind="if: fileExt() === '.csv'" class="d-inline">
+            <button id="btn-addInstance" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
+              data-target="#addInstance-modal" data-bind="enable: fileName">Agregar Instancia</button>
+          </div>
+          <div data-bind="ifnot: fileExt() === '.csv'" class="d-inline">
+            <button id="btn-addInstance" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
+              data-bind="enable: fileName, click: () => addInstance(nullChar())">Agregar Instancia</button>
+          </div>
         </div>
         <div>
           <button id="btn-save" type="button" class="btn btn-outline-success mx-2"
@@ -166,27 +172,76 @@
         </div>
       </div>
 
-      <!-- *** Save As Modal *** -->
-      <div class="modal" id="saveAs-modal">
+      <!-- *** Add Attr Modal *** -->
+      <div class="modal" id="addAttr-modal">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Guardar Como</h4>
+              <h4 class="modal-title">Agregar Atributo</h4>
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-            <div id="saveAs-body" class="modal-body">
-              <input type="text" class="form-control mb-2" placeholder="Nombre del archivo" />
-              <select class="form-control">
-                <option value=".csv">CSV</option>
-                <option value=".data">Data</option>
+            <div id="addAttr-body" class="modal-body">
+              <label class="mt-2">Nombre</label>
+              <input type="text" class="form-control mb-2 attr-name" />
+              <label class="mt-2">Regex</label>
+              <input type="text" class="form-control mb-2 attr-regex" />
+              <label class="mt-2">Tipo</label>
+              <select class="form-control attr-type">
+                <option value="nominal">nominal</option>
+                <option value="numerico">numerico</option>
               </select>
+              <div data-bind="if: fileExt() === '.csv'">
+                <label class="mt-3">Valor por Defecto</label>
+                <input type="text" class="form-control mb-2 attr-default" />
+              </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary" onClick="saveFileFromModal()">Guardar</button>
+              <button type="button" class="btn btn-outline-primary" onClick="addAttributeFromModal()">Agregar</button>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- *** Add Instance Modal *** -->
+      <div class="modal" id="addInstance-modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Agregar Instancia</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div id="addInstance-body" class="modal-body">
+              <label class="mt-2">Valor por Defecto</label>
+              <input type="text" class="form-control mb-2" />
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-primary" onClick="addInstanceFromModal()">Agregar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- *** Save As Modal *** -->
+      <div class="modal" id="saveAs-modal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Guardar Como</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div id="saveAs-body" class="modal-body">
+                <input type="text" class="form-control mb-2" placeholder="Nombre del archivo" />
+                <select class="form-control">
+                  <option value=".csv">CSV</option>
+                  <option value=".data">Data</option>
+                </select>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" onClick="saveFileFromModal()">Guardar</button>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
 
     <!-- *** Other sections *** -->

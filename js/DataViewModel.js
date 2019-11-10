@@ -35,7 +35,7 @@ function DataViewModel() {
   self.generalInfo = ko.observable('');
   self.nullChar = ko.observable('');
 
-  self.valueTypeOptions = ['categorico', 'numerico'];
+  self.valueTypeOptions = ['nominal', 'numerico'];
 
   // *** Computed values ***
   self.noInstances = ko.pureComputed(function () {
@@ -68,7 +68,7 @@ function DataViewModel() {
     const defaultOptions = {
       generalInfo: '%% no info\n',
       relation: 'default_name',
-      attr: { regex: '\\w{2}', type: 'categorico' },
+      attr: { regex: '\\w{2}', type: 'nominal' },
       nullChar: ''
     };
 
@@ -79,7 +79,7 @@ function DataViewModel() {
     self.nullChar(options.nullChar || defaultOptions.nullChar);
 
     if (options.fileExt === '.csv') {
-      self.attributesInfo.splice(0);
+      //self.attributesInfo.splice(0);
       for (let i = 0; i < data[0].length; i++) {
         self.attributesInfo.push(new AttributeInfo(defaultOptions.attr.regex, defaultOptions.attr.type));
       }
@@ -93,7 +93,7 @@ function DataViewModel() {
       }
     }
     else if (options.fileExt === '.data') {
-      self.attributesInfo.splice(0);
+      //self.attributesInfo.splice(0);
       for (let i = 0; i < data[0].length; i++) {
         self.attributesInfo.push(new AttributeInfo(options.attrsInfo[i].regex, options.attrsInfo[i].type));
       }
@@ -145,9 +145,28 @@ function DataViewModel() {
     document.querySelector('.modal-backdrop.show').remove();
   }
 
+  self.addAttr = function (name, regex, type, defaultNull) {
+    let nullChar = self.fileExt() === '.csv' ? defaultNull : self.nullChar();
+    
+    for (let i = 1; i < self.grid().length; i++) {
+      self.grid()[i].slots.push(new Slot(nullChar, regex));
+    }
+    
+    self.attributesInfo.push(new AttributeInfo(regex, type));
+    self.grid()[0].slots.push(new Slot(name, regex));
+  }
+
   self.deleteInstance = function (index) {
     self.grid.splice(index, 1);
     document.querySelector('.modal-backdrop.show').remove();
+  }
+
+  self.addInstance = function (defaultNull) {
+    let slotsArray = [];
+    for (let attr of self.attributesInfo()) {
+      slotsArray.push(new Slot(defaultNull, attr.regex()));
+    }
+    self.grid.push(new Row(slotsArray));
   }
 }
 
