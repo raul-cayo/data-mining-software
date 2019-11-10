@@ -2,14 +2,57 @@ function readFile() {
   let fileToLoad = document.getElementById('fileToLoad').files[0];
   let fileReader = new FileReader();
   let fileArr = fileToLoad.name.split('.');
-  vm.fileName(fileArr[0]);
-  vm.fileExt('.' + fileArr[1]);
+  let options = {};
+
+  options.fileName = fileArr[0];
+  options.fileExt = '.' + fileArr[1];
+  options.generalInfo = '';
+  options.attrsInfo = [];
 
   fileReader.onload = function (event) {
     let textFromFileLoaded = event.target.result;
-    let data = Papa.parse(textFromFileLoaded).data;
+    let data;
+    if (options.fileExt === '.csv') {
+      data = Papa.parse(textFromFileLoaded).data;
+    }
+    else if (options.fileExt === '.data'){
+      let textLines = textFromFileLoaded.split('\n');
+      let dataText = '';
+      let gettingData = false;
 
-    vm.loadData(data);
+      for (let line of textLines) {
+        if (line === '') continue;
+        if (gettingData) {
+          dataText += line + '\n';
+        }
+        else if (line.slice(0, 2) === '%%') {
+          options.generalInfo += line + '\n';
+        }
+        else if (line.slice(0, 1) === '@') {
+          if (line.slice(1, 9) === 'relation') {
+            options.relation = line.slice(10);
+          }
+          if (line.slice(1, 10) === 'attribute') {
+            let attrInfo = line.slice(11).split(' ');
+            dataText += attrInfo[0] + ',';
+            options.attrsInfo.push({
+              type: attrInfo[1],
+              regex: attrInfo[2]
+            });
+          }
+          if (line.slice(1, 13) === 'missingValue') {
+            options.missingValue = line.slice(14);
+          }
+          if (line.slice(1, 5) === 'data') {
+            dataText = dataText.slice(0, -1) + '\n';
+            gettingData = true;
+          }
+        }
+      }
+      data = Papa.parse(dataText.slice(0, -1)).data;
+    }
+
+    vm.loadData(data, options);
   };
 
   fileReader.readAsText(fileToLoad, 'UTF-8');
@@ -27,9 +70,10 @@ function saveFile(fileName, fileExt) {
 
   let fileContent = '';
   if (fileExt === '.csv') {
+    console.log(Papa.unparse(data));
     fileContent = Papa.unparse(data);
   }
-  else {
+  else if (fileExt === '.data') {
     const gridHead = data.shift();
     fileContent += (vm.generalInfo() + '\n');
     fileContent += ('@relation ' + vm.relation() + '\n');
@@ -43,6 +87,7 @@ function saveFile(fileName, fileExt) {
 
     fileContent += ('@missingValue ' + vm.nullChar() + '\n\n');
     fileContent += '@data\n';
+    console.log(Papa.unparse(data));
     fileContent += Papa.unparse(data);
   }
 

@@ -1,19 +1,19 @@
 /* ***** MODEL DEFINITION ***** */
 
-function Slot(value) {
+function Slot(value, regex) {
   var self = this;
   self.value = ko.observable(value);
-  self.regex = ko.observable('\\w{2}');
+  self.regex = ko.observable(regex);
 
-  self.regexStatus = ko.pureComputed(function(){
+  self.regexStatus = ko.pureComputed(function () {
     return self.value().match(new RegExp(self.regex())) ? '' : 'border-danger';
   }, self);
 }
 
-function AttributeInfo(regex) {
+function AttributeInfo(regex, type) {
   var self = this;
-  self.regex = ko.observable(regex); // default value
-  self.type = ko.observable('categorico'); // default value
+  self.regex = ko.observable(regex);
+  self.type = ko.observable(type);
   self.noMissingValues = ko.observable(0);
   self.percentMissing = ko.observable(0);
   self.noBadValues = ko.observable(0);
@@ -31,22 +31,22 @@ function DataViewModel() {
 
   self.fileName = ko.observable('');
   self.fileExt = ko.observable('');
-  self.relation = ko.observable('default_name');  // default value
-  self.generalInfo = ko.observable('%% no info\n'); // default value
-  self.nullChar = ko.observable(''); //default value
+  self.relation = ko.observable('');
+  self.generalInfo = ko.observable('');
+  self.nullChar = ko.observable('');
 
   self.valueTypeOptions = ['categorico', 'numerico'];
 
   // *** Computed values ***
-  self.noInstances = ko.pureComputed(function() {
+  self.noInstances = ko.pureComputed(function () {
     return self.grid().length - 1;
   }, self);
 
-  self.noAttributes = ko.pureComputed(function() {
+  self.noAttributes = ko.pureComputed(function () {
     return self.attributesInfo().length;
   }, self);
 
-  self.totalMissingValues = ko.pureComputed(function() {
+  self.totalMissingValues = ko.pureComputed(function () {
     let totalMissing = 0;
     for (let row of self.grid()) {
       for (let slot of row.slots()) {
@@ -58,36 +58,62 @@ function DataViewModel() {
     return totalMissing;
   }, self);
 
-  self.totalPercentMissing = ko.pureComputed(function() {
+  self.totalPercentMissing = ko.pureComputed(function () {
     let percent = self.totalMissingValues() * 100 / (self.noInstances() * self.noAttributes());
     return percent.toFixed(2);
   }, self);
 
   // *** Functions ***
-  self.loadData = function(data) {
-    // TODO: read metadata from .data and add defaults
-    for (let i = 0; i < data[0].length; i++) {
-      self.attributesInfo.push(new AttributeInfo('\\w{2}')); // default value
-    }
+  self.loadData = function (data, options) {
+    const defaultOptions = {
+      generalInfo: '%% no info\n',
+      relation: 'default_name',
+      attr: { regex: '\\w{2}', type: 'categorico' },
+      nullChar: ''
+    };
 
-    self.grid.splice(0);
-    for (let row of data) {
-      let slotsArray = [];
-      for (let value of row) {
-        slotsArray.push(new Slot(value));
+    self.fileName(options.fileName);
+    self.fileExt(options.fileExt);
+    self.relation(options.relation || defaultOptions.relation);
+    self.generalInfo(options.generalInfo || defaultOptions.generalInfo);
+    self.nullChar(options.nullChar || defaultOptions.nullChar);
+
+    if (options.fileExt === '.csv') {
+      for (let i = 0; i < data[0].length; i++) {
+        self.attributesInfo.push(new AttributeInfo(defaultOptions.attr.regex, defaultOptions.attr.type));
       }
-      self.grid.push(new Row(slotsArray));
+      self.grid.splice(0);
+      for (let row of data) {
+        let slotsArray = [];
+        for (let value of row) {
+          slotsArray.push(new Slot(value, defaultOptions.attr.regex));
+        }
+        self.grid.push(new Row(slotsArray));
+      }
+    }
+    else if (options.fileExt === '.data') {
+      for (let i = 0; i < data[0].length; i++) {
+        self.attributesInfo.push(new AttributeInfo(options.attrsInfo[i].regex, options.attrsInfo[i].type));
+      }
+      self.grid.splice(0);
+      for (let row of data) {
+        let slotsArray = [];
+        for (let j = 0; j < row.length; j++) {
+          slotsArray.push(new Slot(row[j], options.attrsInfo[j].regex));
+        }
+        self.grid.push(new Row(slotsArray));
+      }
     }
   }
 
-  self.updateRegex = function(index) {
+  self.updateRegex = function (index) {
     for (let row of self.grid()) {
       let newRegex = self.attributesInfo()[index].regex();
       row.slots()[index].regex(newRegex);
     }
   }
 
-  self.updateAttrInfo = function(index) {
+  self.updateAttrInfo = function (index) {
     let countMissing = 0;
     let countBad = 0;
 
@@ -109,7 +135,7 @@ function DataViewModel() {
     self.attributesInfo()[index].noBadValues(countBad);
   }
 
-  self.deleteAttr = function(index) {
+  self.deleteAttr = function (index) {
     for (let row of self.grid()) {
       row.slots.splice(index, 1);
     }
@@ -117,7 +143,7 @@ function DataViewModel() {
     document.querySelector('.modal-backdrop.show').remove();
   }
 
-  self.deleteInstance = function(index) {
+  self.deleteInstance = function (index) {
     self.grid.splice(index, 1);
     document.querySelector('.modal-backdrop.show').remove();
   }
