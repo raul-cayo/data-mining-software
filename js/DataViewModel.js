@@ -5,7 +5,10 @@ function Slot(value, regex) {
   self.value = ko.observable(value);
   self.regex = ko.observable(regex);
 
-  self.regexStatus = ko.pureComputed(function () {
+  self.status = ko.pureComputed(function () {
+    if (self.value() === vm.nullChar()){
+      return 'border-warning';
+    }
     return self.value().match(new RegExp(self.regex())) ? '' : 'border-danger';
   }, self);
 }
@@ -121,7 +124,7 @@ function DataViewModel() {
 
     for (var i = 1; i < self.grid().length; i++) {
       let missingValue = self.grid()[i].slots()[index].value() === self.nullChar() ? true : false;
-      let badValue = self.grid()[i].slots()[index].regexStatus() === '' ? false : true;
+      let badValue = self.grid()[i].slots()[index].status() === '' ? false : true;
 
       if (missingValue) {
         countMissing++;

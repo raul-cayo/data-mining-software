@@ -86,10 +86,8 @@ function saveFile(fileName, fileExt) {
 
     fileContent += ('@missingValue ' + vm.nullChar() + '\n\n');
     fileContent += '@data\n';
-    fileContent += Papa.unparse(data).replace(/"/g, '');
-    console.log(fileContent);
+    fileContent += Papa.unparse(data, {newline: '\n'}).replace(/"/g, '');
   }
-
   let blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
   saveAs(blob, fileName + fileExt);
 }
