@@ -70,7 +70,6 @@ function saveFile(fileName, fileExt) {
 
   let fileContent = '';
   if (fileExt === '.csv') {
-    console.log(Papa.unparse(data));
     fileContent = Papa.unparse(data);
   }
   else if (fileExt === '.data') {
@@ -87,8 +86,8 @@ function saveFile(fileName, fileExt) {
 
     fileContent += ('@missingValue ' + vm.nullChar() + '\n\n');
     fileContent += '@data\n';
-    console.log(Papa.unparse(data));
-    fileContent += Papa.unparse(data);
+    fileContent += Papa.unparse(data).replace(/"/g, '');
+    console.log(fileContent);
   }
 
   let blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });

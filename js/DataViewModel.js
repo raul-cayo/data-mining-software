@@ -79,6 +79,7 @@ function DataViewModel() {
     self.nullChar(options.nullChar || defaultOptions.nullChar);
 
     if (options.fileExt === '.csv') {
+      self.attributesInfo.splice(0);
       for (let i = 0; i < data[0].length; i++) {
         self.attributesInfo.push(new AttributeInfo(defaultOptions.attr.regex, defaultOptions.attr.type));
       }
@@ -92,6 +93,7 @@ function DataViewModel() {
       }
     }
     else if (options.fileExt === '.data') {
+      self.attributesInfo.splice(0);
       for (let i = 0; i < data[0].length; i++) {
         self.attributesInfo.push(new AttributeInfo(options.attrsInfo[i].regex, options.attrsInfo[i].type));
       }
