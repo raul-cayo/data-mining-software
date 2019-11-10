@@ -22,7 +22,7 @@
   <div class="tab-content px-5 py-2" id="nav-tabContent">
 
     <!-- ***** ENTRADAD DE DATOS ***** -->
-    <div class="tab-pane fade show active" id="nav-input">
+    <div class="tab-pane fade show active" id="nav-input" style="padding-bottom: 80px;">
       <div class="form-group">
         <div class="input-group input-file" name="Fichier1">
           <span class="input-group-btn">
@@ -151,11 +151,19 @@
       </table>
 
       <!-- *** Actions *** -->
-      <div id="actions-input" class="bg-white border-top border-primary fixed-bottom p-3 d-flex justify-content-center">
-        <button id="btn-save" type="button" class="btn btn-outline-primary mx-2"
-          onClick="saveFile(vm.fileName(), vm.fileExt())" data-bind="enable: fileName">Guardar</button>
-        <button id="btn-saveAs" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
-          data-target="#saveAs-modal" data-bind="enable: fileName">Guardar Como</button>
+      <div id="actions-input" class="bg-white border-top border-dark fixed-bottom p-3 d-flex justify-content-around">
+        <div>
+          <button id="btn-addAttr" type="button" class="btn btn-outline-primary mx-2"
+            data-target="#" data-bind="enable: fileName">Agregar Atributo</button>
+          <button id="btn-addInstance" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
+            data-target="#" data-bind="enable: fileName">Agregar Instancia</button>
+        </div>
+        <div>
+          <button id="btn-save" type="button" class="btn btn-outline-success mx-2"
+            onClick="saveFile(vm.fileName(), vm.fileExt())" data-bind="enable: fileName">Guardar</button>
+          <button id="btn-saveAs" type="button" class="btn btn-outline-success mx-2" data-toggle="modal"
+            data-target="#saveAs-modal" data-bind="enable: fileName">Guardar Como</button>
+        </div>
       </div>
 
       <!-- *** Save As Modal *** -->
