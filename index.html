@@ -39,7 +39,7 @@
       <div data-bind="if: fileName">
         <div class="row border border-secondary rounded mx-5 my-3">
           <div class="col-12 col-md-4 mt-md-3">
-            <p class="text-center mt-2">Nombre: <span data-bind="text: name"></span></p>
+            <p class="text-center mt-2">Nombre: <span data-bind="text: relation"></span></p>
           </div>
           <div class="col-12 col-md-4">
             <p class="text-center my-2">No. Instancias: <span data-bind="text: noInstances"></span></p>
@@ -128,7 +128,8 @@
                           <div>Regex</div>
                           <div>
                             Actual: 
-                            <span class="border border-info text-info rounded bg-light px-2 pt-0 pb-1 ml-2" data-bind="text: regex"></span>
+                            <span class="border border-info text-info rounded bg-light px-2 pt-0 pb-1 ml-2" 
+                              data-bind="text: regex"></span>
                           </div>
                         </label>
                         <input data-bind="textInput: $root.attributesInfo()[$index()].regex" type="text"

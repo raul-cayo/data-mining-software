@@ -13,7 +13,7 @@ function Slot(value) {
 function AttributeInfo(regex) {
   var self = this;
   self.regex = ko.observable(regex); // default value
-  self.type = ko.observable('Categórico'); // default value
+  self.type = ko.observable('categorico'); // default value
   self.noMissingValues = ko.observable(0);
   self.percentMissing = ko.observable(0);
   self.noBadValues = ko.observable(0);
@@ -28,10 +28,14 @@ function DataViewModel() {
   var self = this;
   self.grid = ko.observableArray([]);
   self.attributesInfo = ko.observableArray([]);
+
   self.fileName = ko.observable('');
   self.fileExt = ko.observable('');
-  self.name = ko.observable('Datos');  // default value
-  self.valueTypeOptions = ['Categórico', 'Numérico'];
+  self.relation = ko.observable('default_name');  // default value
+  self.generalInfo = ko.observable('%% no info\n'); // default value
+  self.nullChar = ko.observable(''); //default value
+
+  self.valueTypeOptions = ['categorico', 'numerico'];
 
   // *** Computed values ***
   self.noInstances = ko.pureComputed(function() {
@@ -88,7 +92,7 @@ function DataViewModel() {
     let countBad = 0;
 
     for (var i = 1; i < self.grid().length; i++) {
-      let missingValue = self.grid()[i].slots()[index].value() === '' ? true : false;
+      let missingValue = self.grid()[i].slots()[index].value() === self.nullChar() ? true : false;
       let badValue = self.grid()[i].slots()[index].regexStatus() === '' ? false : true;
 
       if (missingValue) {
