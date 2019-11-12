@@ -82,11 +82,11 @@ function DataViewModel() {
     self.nullChar(options.nullChar || defaultOptions.nullChar);
 
     if (options.fileExt === '.csv') {
-      //self.attributesInfo.splice(0);
+      self.grid.splice(0);
+      self.attributesInfo.splice(0);
       for (let i = 0; i < data[0].length; i++) {
         self.attributesInfo.push(new AttributeInfo(defaultOptions.attr.regex, defaultOptions.attr.type));
       }
-      self.grid.splice(0);
       for (let row of data) {
         let slotsArray = [];
         for (let value of row) {
@@ -96,11 +96,11 @@ function DataViewModel() {
       }
     }
     else if (options.fileExt === '.data') {
-      //self.attributesInfo.splice(0);
+      self.grid.splice(0);
+      self.attributesInfo.splice(0);
       for (let i = 0; i < data[0].length; i++) {
         self.attributesInfo.push(new AttributeInfo(options.attrsInfo[i].regex, options.attrsInfo[i].type));
       }
-      self.grid.splice(0);
       for (let row of data) {
         let slotsArray = [];
         for (let j = 0; j < row.length; j++) {

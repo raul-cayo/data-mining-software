@@ -15,7 +15,7 @@ function readFile() {
     if (options.fileExt === '.csv') {
       data = Papa.parse(textFromFileLoaded).data;
     }
-    else if (options.fileExt === '.data'){
+    else if (options.fileExt === '.data') {
       let textLines = textFromFileLoaded.split('\n');
       let dataText = '';
       let gettingData = false;
@@ -70,7 +70,7 @@ function saveFile(fileName, fileExt) {
 
   let fileContent = '';
   if (fileExt === '.csv') {
-    fileContent = Papa.unparse(data);
+    fileContent = Papa.unparse(data, {newline: '\n'});
   }
   else if (fileExt === '.data') {
     const gridHead = data.shift();
@@ -86,7 +86,7 @@ function saveFile(fileName, fileExt) {
 
     fileContent += ('@missingValue ' + vm.nullChar() + '\n\n');
     fileContent += '@data\n';
-    fileContent += Papa.unparse(data, {newline: '\n'}).replace(/"/g, '');
+    fileContent += Papa.unparse(data, {newline: '\n'});
   }
   let blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
   saveAs(blob, fileName + fileExt);
