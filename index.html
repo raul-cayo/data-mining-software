@@ -101,7 +101,6 @@
                     <div class="modal-content">
                       <div class="modal-header">
                         <h4 class="modal-title" data-bind="text: 'Atributo ' + value()"></h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                       </div>
                       <div class="modal-body">
                         <input data-bind="textInput: value" type="text" class="form-control" />
@@ -137,6 +136,9 @@
                           class="form-control" placeholder="Ej. ^[A-Z]{3}$" />
                       </div>
                       <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-success" data-dismiss="modal">
+                          Guardar
+                        </button>
                         <button type="button" class="btn btn-outline-primary"
                           data-bind="click: () => $root.updateRegex($index())">Aplicar Regex</button>
                         <button type="button" class="btn btn-outline-danger"
@@ -251,8 +253,51 @@
       </div>
     </div>
 
+    <!-- ***** ANALISIS ESTADISTICO ***** -->
+    <div class="tab-pane fade" id="nav-analysis" data-bind="if: fileName">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <h3 class="mt-3 text-center">Univariable</h3>
+          <div id="univariate" class="container-fluid border border-dark rounded">
+            <select class="form-control my-2"
+              data-bind="options: attributeOptions,
+              optionsText: 'name',
+              value: univariate,
+              optionsCaption: 'Seleccione Atributo'"
+              onchange="drawBoxplot()"></select>
+            <div id="uni-boxplot" class="mx-auto"></div>
+            <div class="m-2 border border-info rounded row">
+              <p class="text-center my-2 col-md-4">Media: <span data-bind="text: uniAvg"></span></p>
+              <p class="text-center my-2 col-md-4">Mediana: <span data-bind="text: uniMed"></span></p>
+              <p class="text-center my-2 col-md-4">Moda: <span data-bind="text: uniMode"></span></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-md-6">
+          <h3 class="mt-3 text-center">Bivariable</h3>
+          <div class="container-fluid border border-dark rounded">
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <select class="form-control my-2"
+                  data-bind="options: attributeOptions,
+                  optionsText: 'name',
+                  value: firstBivariate,
+                  optionsCaption: 'Seleccione Atributo'"></select>
+              </div>
+              <div class="col-12 col-md-6">
+                <select class="form-control my-2"
+                  data-bind="options: attributeOptions,
+                  optionsText: 'name',
+                  value: secondBivariate,
+                  optionsCaption: 'Seleccione Atributo'"></select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- *** Other sections *** -->
-    <div class="tab-pane fade" id="nav-analysis">Análisis Estadístico</div>
     <div class="tab-pane fade" id="nav-clean">Limpieza de Datos</div>
     <div class="tab-pane fade" id="nav-learning">Aprendizaje Máquina</div>
   </div>
@@ -262,10 +307,14 @@
   <script src="vendors/bootstrap.min.js"></script>
   <script src="vendors/papaparse.min.js"></script>
   <script src="vendors/FileSaver.min.js"></script>
+  <script src="vendors/plotly.min.js"></script>
 
   <script src="js/components/fileinput.js"></script>
   <script src="js/DataViewModel.js"></script>
   <script src="js/EntradaDatos.js"></script>
+  <script src="js/AnalisisEstadistico.js"></script>
+  
+
 
   <script>
     /* window.addEventListener('beforeunload', function (e) {

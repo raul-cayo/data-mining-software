@@ -38,6 +38,13 @@ function DataViewModel() {
   self.generalInfo = ko.observable('');
   self.nullChar = ko.observable('');
 
+  self.univariate = ko.observable('');
+  self.uniAvg = ko.observable('');
+  self.uniMed = ko.observable('');
+  self.uniMode = ko.observable('');
+  self.firstBivariate = ko.observable('');
+  self.secondBivariate = ko.observable('');
+
   self.valueTypeOptions = ['nominal', 'numerico', 'ordinal'];
 
   // *** Computed values ***
@@ -64,6 +71,20 @@ function DataViewModel() {
   self.totalPercentMissing = ko.pureComputed(function () {
     let percent = self.totalMissingValues() * 100 / (self.noInstances() * self.noAttributes());
     return percent.toFixed(2);
+  }, self);
+
+  self.attributeOptions = ko.pureComputed(function () {
+    let attrArray = []
+    if(self.grid()[0]){
+      for (let i = 0; i < self.grid()[0].slots().length; i++) {
+        attrArray.push({
+          index: i, 
+          name: self.grid()[0].slots()[i].value(),
+          type: self.attributesInfo()[i].type()
+        });
+      }
+    }
+    return attrArray;
   }, self);
 
   // *** Functions ***
