@@ -116,3 +116,13 @@ function addInstanceFromModal() {
   let instanceDefault = document.querySelector('#addInstance-body input').value;
   vm.addInstance(instanceDefault);
 }
+
+function showLoading () {
+  $('#loading-modal').modal('show');
+}
+
+function hideLoading () {
+  setTimeout(() => {
+    $('#loading-modal').modal('hide');
+  }, 300); 
+}

@@ -68,54 +68,63 @@ function DataViewModel() {
 
   // *** Functions ***
   self.loadData = function (data, options) {
-    const defaultOptions = {
-      generalInfo: '%% no info\n',
-      relation: 'default_name',
-      attr: { regex: '\\w{2}', type: 'nominal' },
-      nullChar: ''
-    };
+    showLoading();
+    setTimeout(() => {
+      const defaultOptions = {
+        generalInfo: '%% no info\n',
+        relation: 'default_name',
+        attr: { regex: '\\w{2}', type: 'nominal' },
+        nullChar: ''
+      };
 
-    self.fileName(options.fileName);
-    self.fileExt(options.fileExt);
-    self.relation(options.relation || defaultOptions.relation);
-    self.generalInfo(options.generalInfo || defaultOptions.generalInfo);
-    self.nullChar(options.nullChar || defaultOptions.nullChar);
+      self.fileName(options.fileName);
+      self.fileExt(options.fileExt);
+      self.relation(options.relation || defaultOptions.relation);
+      self.generalInfo(options.generalInfo || defaultOptions.generalInfo);
+      self.nullChar(options.nullChar || defaultOptions.nullChar);
 
-    if (options.fileExt === '.csv') {
-      self.grid.splice(0);
-      self.attributesInfo.splice(0);
-      for (let i = 0; i < data[0].length; i++) {
-        self.attributesInfo.push(new AttributeInfo(defaultOptions.attr.regex, defaultOptions.attr.type));
-      }
-      for (let row of data) {
-        let slotsArray = [];
-        for (let value of row) {
-          slotsArray.push(new Slot(value, defaultOptions.attr.regex));
+      if (options.fileExt === '.csv') {
+        self.grid.splice(0);
+        self.attributesInfo.splice(0);
+        for (let i = 0; i < data[0].length; i++) {
+          self.attributesInfo.push(new AttributeInfo(defaultOptions.attr.regex, defaultOptions.attr.type));
         }
-        self.grid.push(new Row(slotsArray));
-      }
-    }
-    else if (options.fileExt === '.data') {
-      self.grid.splice(0);
-      self.attributesInfo.splice(0);
-      for (let i = 0; i < data[0].length; i++) {
-        self.attributesInfo.push(new AttributeInfo(options.attrsInfo[i].regex, options.attrsInfo[i].type));
-      }
-      for (let row of data) {
-        let slotsArray = [];
-        for (let j = 0; j < row.length; j++) {
-          slotsArray.push(new Slot(row[j], options.attrsInfo[j].regex));
+        for (let row of data) {
+          let slotsArray = [];
+          for (let value of row) {
+            slotsArray.push(new Slot(value, defaultOptions.attr.regex));
+          }
+          self.grid.push(new Row(slotsArray));
         }
-        self.grid.push(new Row(slotsArray));
       }
-    }
+      else if (options.fileExt === '.data') {
+        self.grid.splice(0);
+        self.attributesInfo.splice(0);
+        for (let i = 0; i < data[0].length; i++) {
+          self.attributesInfo.push(new AttributeInfo(options.attrsInfo[i].regex, options.attrsInfo[i].type));
+        }
+        for (let row of data) {
+          let slotsArray = [];
+          for (let j = 0; j < row.length; j++) {
+            slotsArray.push(new Slot(row[j], options.attrsInfo[j].regex));
+          }
+          self.grid.push(new Row(slotsArray));
+        }
+      }
+      hideLoading();
+    }, 0);
   }
 
   self.updateRegex = function (index) {
-    for (let row of self.grid()) {
-      let newRegex = self.attributesInfo()[index].regex();
-      row.slots()[index].regex(newRegex);
-    }
+    $('#attr' + index).modal('hide');
+    showLoading();
+    setTimeout(() => {
+      for (let row of self.grid()) {
+        let newRegex = self.attributesInfo()[index].regex();
+        row.slots()[index].regex(newRegex);
+      }
+      hideLoading();
+    }, 0);
   }
 
   self.updateAttrInfo = function (index) {
@@ -141,33 +150,51 @@ function DataViewModel() {
   }
 
   self.deleteAttr = function (index) {
-    for (let row of self.grid()) {
-      row.slots.splice(index, 1);
-    }
-    self.attributesInfo.splice(index, 1);
-    document.querySelector('.modal-backdrop.show').remove();
+    $('#attr' + index).modal('hide');
+    showLoading();
+    setTimeout(() => {
+      for (let row of self.grid()) {
+        row.slots.splice(index, 1);
+      }
+      self.attributesInfo.splice(index, 1);
+      hideLoading();
+    }, 0);
   }
 
   self.addAttr = function (name, regex, type, defaultValue) {
-    for (let i = 1; i < self.grid().length; i++) {
-      self.grid()[i].slots.push(new Slot(defaultValue, regex));
-    }
-    
-    self.attributesInfo.push(new AttributeInfo(regex, type));
-    self.grid()[0].slots.push(new Slot(name, regex));
+    $('#addAttr-modal').modal('hide');
+    showLoading();
+    setTimeout(() => {
+      for (let i = 1; i < self.grid().length; i++) {
+        self.grid()[i].slots.push(new Slot(defaultValue, regex));
+      }
+      
+      self.attributesInfo.push(new AttributeInfo(regex, type));
+      self.grid()[0].slots.push(new Slot(name, regex));
+      hideLoading();
+    }, 0);
   }
 
   self.deleteInstance = function (index) {
-    self.grid.splice(index, 1);
-    document.querySelector('.modal-backdrop.show').remove();
+    $('#instanceModal' + index).modal('hide');
+    showLoading();
+    setTimeout(() => {
+      self.grid.splice(index, 1);
+      hideLoading();
+    }, 0);
   }
 
   self.addInstance = function (defaultValue) {
-    let slotsArray = [];
-    for (let attr of self.attributesInfo()) {
-      slotsArray.push(new Slot(defaultValue, attr.regex()));
-    }
-    self.grid.push(new Row(slotsArray));
+    $('#addInstance-modal').modal('hide');
+    showLoading();
+    setTimeout(() => {
+      let slotsArray = [];
+      for (let attr of self.attributesInfo()) {
+        slotsArray.push(new Slot(defaultValue, attr.regex()));
+      }
+      self.grid.push(new Row(slotsArray));
+      hideLoading();
+    }, 0);
   }
 }
 
