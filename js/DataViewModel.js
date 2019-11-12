@@ -38,7 +38,7 @@ function DataViewModel() {
   self.generalInfo = ko.observable('');
   self.nullChar = ko.observable('');
 
-  self.valueTypeOptions = ['nominal', 'numerico'];
+  self.valueTypeOptions = ['nominal', 'numerico', 'ordinal'];
 
   // *** Computed values ***
   self.noInstances = ko.pureComputed(function () {
