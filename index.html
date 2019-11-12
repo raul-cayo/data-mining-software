@@ -38,8 +38,9 @@
       <!-- *** Data Info *** -->
       <div data-bind="if: fileName">
         <div class="row border border-secondary rounded mx-5 my-3">
-          <div class="col-12 col-md-4 mt-md-3">
-            <p class="text-center mt-2">Nombre: <span data-bind="text: relation"></span></p>
+          <div class="col-12 col-md-4">
+            <p class="text-center my-2">Nombre: <span data-bind="text: relation"></span></p>
+            <p class="text-center my-2">Caracter Nulo: "<span data-bind="text: nullChar"></span>"</p>
           </div>
           <div class="col-12 col-md-4">
             <p class="text-center my-2">No. Instancias: <span data-bind="text: noInstances"></span></p>
@@ -155,14 +156,8 @@
         <div>
           <button id="btn-addAttr" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
             data-target="#addAttr-modal" data-bind="enable: fileName">Agregar Atributo</button>
-          <div data-bind="if: fileExt() === '.csv'" class="d-inline">
-            <button id="btn-addInstance" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
-              data-target="#addInstance-modal" data-bind="enable: fileName">Agregar Instancia</button>
-          </div>
-          <div data-bind="ifnot: fileExt() === '.csv'" class="d-inline">
-            <button id="btn-addInstance" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
-              data-bind="enable: fileName, click: () => addInstance(nullChar())">Agregar Instancia</button>
-          </div>
+          <button id="btn-addInstance" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
+            data-target="#addInstance-modal" data-bind="enable: fileName">Agregar Instancia</button>
         </div>
         <div>
           <button id="btn-save" type="button" class="btn btn-outline-success mx-2"
@@ -190,10 +185,8 @@
                 <option value="nominal">nominal</option>
                 <option value="numerico">numerico</option>
               </select>
-              <div data-bind="if: fileExt() === '.csv'">
-                <label class="mt-3">Valor por Defecto</label>
-                <input type="text" class="form-control mb-2 attr-default" />
-              </div>
+              <label class="mt-3">Valor por Defecto</label>
+              <input type="text" class="form-control mb-2 attr-default" />
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-outline-primary" onClick="addAttributeFromModal()">Agregar</button>

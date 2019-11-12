@@ -148,11 +148,9 @@ function DataViewModel() {
     document.querySelector('.modal-backdrop.show').remove();
   }
 
-  self.addAttr = function (name, regex, type, defaultNull) {
-    let nullChar = self.fileExt() === '.csv' ? defaultNull : self.nullChar();
-    
+  self.addAttr = function (name, regex, type, defaultValue) {
     for (let i = 1; i < self.grid().length; i++) {
-      self.grid()[i].slots.push(new Slot(nullChar, regex));
+      self.grid()[i].slots.push(new Slot(defaultValue, regex));
     }
     
     self.attributesInfo.push(new AttributeInfo(regex, type));
@@ -164,10 +162,10 @@ function DataViewModel() {
     document.querySelector('.modal-backdrop.show').remove();
   }
 
-  self.addInstance = function (defaultNull) {
+  self.addInstance = function (defaultValue) {
     let slotsArray = [];
     for (let attr of self.attributesInfo()) {
-      slotsArray.push(new Slot(defaultNull, attr.regex()));
+      slotsArray.push(new Slot(defaultValue, attr.regex()));
     }
     self.grid.push(new Row(slotsArray));
   }

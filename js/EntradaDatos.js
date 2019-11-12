@@ -108,13 +108,11 @@ function addAttributeFromModal() {
   let attrName = document.querySelector('#addAttr-body .attr-name').value;
   let attrRegex = document.querySelector('#addAttr-body .attr-regex').value;
   let attrType = document.querySelector('#addAttr-body .attr-type').value;
-  let attrDefault = vm.fileExt === '.csv' ? document.querySelector('#addAttr-body .attr-default').value : '';
-
-  vm.addAttr(attrName, attrRegex, attrType, attrDefault);
+  let attrDefaultValue = document.querySelector('#addAttr-body .attr-default').value;
+  vm.addAttr(attrName, attrRegex, attrType, attrDefaultValue);
 }
 
 function addInstanceFromModal() {
   let instanceDefault = document.querySelector('#addInstance-body input').value;
-
   vm.addInstance(instanceDefault);
 }
