@@ -11,29 +11,22 @@ function univariateChange() {
       var layout = {
         autosize: false,
         width: containerWidth,
-        height: containerWidth - containerTenth,
+        height: containerWidth - (containerTenth * 4),
         margin: {
           r: containerTenth / 2,
           l: containerTenth,
-          t: containerTenth,
+          t: containerTenth / 2,
+          b: containerTenth / 2
         }
       };
+      
       var dataConfig = {
         boxpoints: 'all',
         jitter: 0.3,
-        pointpos: -1.8
+        pointpos: -1.8,
+        x: data,
+        type: vm.univariate().type === 'numerico' ? 'box' : 'histogram'
       };
-
-      if (vm.univariate().type === 'numerico') {
-        layout.margin.b = containerTenth / 2;
-        dataConfig.type = 'box';
-        dataConfig.y = data;
-      }
-      else {
-        layout.margin.b = containerTenth;
-        dataConfig.type = 'histogram';
-        dataConfig.x = data;
-      }
 
       data.sort();
 
@@ -78,23 +71,37 @@ function bivariateChange() {
   setTimeout(() => {
     if (vm.firstBivariate() && vm.secondBivariate()) {
       if (vm.firstBivariate().type === 'numerico' && vm.secondBivariate().type === 'numerico') {
-        
+        let xValues = [];
+        let yValues = [];
+
+        for (let i = 1; i < vm.grid().length; i++) {
+          xValues.push( vm.grid()[i].slots()[vm.firstBivariate().index].value());
+          yValues.push( vm.grid()[i].slots()[vm.secondBivariate().index].value());
+        }
+
         var data = [{
-          x: [1, 2, 3, 4, 5],
-          y: [1, 6, 3, 6, 1],
+          x: xValues,
+          y: yValues,
           mode: 'markers',
           type: 'scatter',
-          marker: { size: 12 }
+          marker: { size: 8 }
         }];
         
+        let xMin = Math.min(...xValues);
+        let xMax = Math.max(...xValues);
+        let yMin = Math.min(...yValues);
+        let yMax = Math.max(...yValues);
+        let xRangeTenth = (Math.max(...xValues) - Math.min(...xValues)) / 10;
+        let yRangeTenth = (Math.max(...yValues) - Math.min(...yValues)) / 10;
+
         var layout = { 
           xaxis: {
-            range: [ 0.75, 5.25 ] 
+            range: [ xMin - xRangeTenth, xMax + xRangeTenth ] 
           },
           yaxis: {
-            range: [0, 8]
+            range: [ yMin - yRangeTenth, yMax + yRangeTenth ]
           },
-          title:'X: Edad, Y: Edad'
+          title: ('X: '+ vm.firstBivariate().name +', Y: '+ vm.secondBivariate().name)
         };
         
         Plotly.newPlot('bi-scatterplot', data, layout, {showSendToCloud: true});
