@@ -269,13 +269,14 @@
               optionsCaption: 'Seleccione Atributo'"
               onchange="univariateChange()"></select>
 
-            <div id="uni-boxplot" class="mx-auto"></div>
-
             <div data-bind="if: univariate">
-              <div class="m-2 border border-info rounded row">
-                <p class="text-center my-2 col-md-4">Media: <span data-bind="text: uniAvg"></span></p>
-                <p class="text-center my-2 col-md-4">Mediana: <span data-bind="text: uniMed"></span></p>
-                <p class="text-center my-2 col-md-4">Moda: <span data-bind="text: uniMode"></span></p>
+              <div id="uni-boxplot" class="mx-auto"></div>
+              <div data-bind="if: univariate().type === 'numerico'">
+                <div class="m-2 border border-info rounded row">
+                  <p class="text-center my-2 col-md-4">Media: <span data-bind="text: uniAvg"></span></p>
+                  <p class="text-center my-2 col-md-4">Mediana: <span data-bind="text: uniMed"></span></p>
+                  <p class="text-center my-2 col-md-4">Moda: <span data-bind="text: uniMode"></span></p>
+                </div>
               </div>
             </div>
           </div>
@@ -304,15 +305,31 @@
               </div>
             </div>
 
-            <div id="bi-scatterplot" class="mx-auto"></div>
-
-            <div data-bind="if: false">
-              <div class="m-2 border border-info rounded row">
-                <p class="text-center my-2 col-md-4">x: <span data-bind="text: 'x'"></span></p>
-                <p class="text-center my-2 col-md-4">y: <span data-bind="text: 'y'"></span></p>
-                <p class="text-center my-2 col-md-4">z: <span data-bind="text: 'z'"></span></p>
+            <div data-bind="if: firstBivariate && secondBivariate">
+              <div data-bind="if: firstBivariate().type === 'numerico' && secondBivariate().type === 'numerico'">
+                <div id="bi-scatterplot" class="mx-auto"></div>
+                <div class="m-2 border border-info rounded row">
+                  <p class="text-center my-2 col-12">Correlacion de Pearson: 
+                    <span data-bind="text: pearson"></span>
+                  </p>
+                </div>
+              </div>
+              <div data-bind="if: firstBivariate().type === 'nominal' && secondBivariate().type === 'nominal'">
+                <div class="m-2 border border-info rounded row">
+                  <p class="text-center my-2 col-12">Chi Cuadrada: 
+                    <span data-bind="text: pearson"></span>
+                  </p>
+                </div>
+              </div>
+              <div data-bind="if: firstBivariate().type !== secondBivariate().type">
+                <div class="m-2 border border-info rounded row">
+                  <p class="text-center my-2 col-12">
+                    Los atributos seleccionados deben ser del mismo tipo.
+                  </p>
+                </div>
               </div>
             </div>
+
           </div>
         </div>
 

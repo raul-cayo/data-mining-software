@@ -46,6 +46,7 @@ function DataViewModel() {
 
   self.firstBivariate = ko.observable('');
   self.secondBivariate = ko.observable('');
+  self.pearson = ko.observable('');
 
   self.valueTypeOptions = ['nominal', 'numerico' /*, ordinal*/];
 

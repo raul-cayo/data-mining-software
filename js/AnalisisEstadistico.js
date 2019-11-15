@@ -5,7 +5,7 @@ function univariateChange() {
       for (let i = 1; i < vm.grid().length; i++) {
         data.push( vm.grid()[i].slots()[vm.univariate().index].value());
       }
-     
+
       var containerWidth = $('#univariate').width() - 30;
       var containerTenth = Math.floor(containerWidth / 10);
       var layout = {
@@ -19,7 +19,7 @@ function univariateChange() {
           b: containerTenth / 2
         }
       };
-      
+
       var dataConfig = {
         boxpoints: 'all',
         jitter: 0.3,
@@ -28,19 +28,20 @@ function univariateChange() {
         type: vm.univariate().type === 'numerico' ? 'box' : 'histogram'
       };
 
+      Plotly.newPlot('uni-boxplot', [dataConfig], layout);
+
+      // Calculate median mode and mean
       data.sort();
 
       let sum = 0;
       let firstMid = parseInt(data[Math.floor(data.length / 2)]);
       let secondMid = parseInt(data[data.length / 2 - 1]);
-      for (let i = 0; i < data.length; i++) {
-        sum += parseInt(data[i]);
+      for (let value of data) {
+        sum += parseInt(value);
       }
       vm.uniAvg((sum / data.length).toFixed(2));
       vm.uniMed(data.length % 2 === 0 ? (firstMid + secondMid) / 2 : firstMid);
       vm.uniMode(getModes(data).join(', '));
-      
-      Plotly.newPlot('uni-boxplot', [dataConfig], layout);
     }
   }, 500);
 }
@@ -104,13 +105,41 @@ function bivariateChange() {
           title: ('X: '+ vm.firstBivariate().name +', Y: '+ vm.secondBivariate().name)
         };
         
-        Plotly.newPlot('bi-scatterplot', data, layout, {showSendToCloud: true});
+        Plotly.newPlot('bi-scatterplot', data, layout);
+
+        // Calculate pearson
+        let xSum = 0;
+        let ySum = 0;
+        for (let i = 0; i < xValues.length; i++) {
+          xSum += parseInt(xValues[i]);
+          ySum += parseInt(yValues[i]);
+        }
+        let xAvg = xSum / xValues.length;
+        let yAvg = ySum / yValues.length;
+
+        let xMinusAvg2Sum = 0;
+        let yMinusAvg2Sum = 0;
+        let xMinusAvgyMinusAvgSum = 0;
+        for (let i = 0; i < xValues.length; i++) {
+          xMinusAvg2Sum += (xValues[i] - xAvg) * (xValues[i] - xAvg);
+          yMinusAvg2Sum += (yValues[i] - yAvg) * (yValues[i] - yAvg);
+          xMinusAvgyMinusAvgSum += (xValues[i] - xAvg) * (yValues[i] - yAvg);
+        }
+        let xStdDesv = Math.sqrt(xMinusAvg2Sum / xValues.length);
+        let yStdDesv = Math.sqrt(yMinusAvg2Sum / yValues.length);
+        
+        console.log('xStdDesv: ' + xStdDesv);
+        console.log('yStdDesv: ' + yStdDesv);
+        console.log('xMinusAvgyMinusAvgSum: ' + xMinusAvgyMinusAvgSum);
+        console.log('yStdDesv: ' + yStdDesv);
+
+        vm.pearson((xMinusAvgyMinusAvgSum / (xValues.length * xStdDesv * yStdDesv)).toFixed(4));
       }
       else if (vm.firstBivariate().type === 'nominal' && vm.secondBivariate().type === 'nominal') {
-        console.log('show chi^2')
+        console.log('show chi^2');
       }
       else {
-        console.log('Los tipos de datos son diferentes')
+        console.log('Los tipos de datos son diferentes');
       }
     }
   }, 500);
