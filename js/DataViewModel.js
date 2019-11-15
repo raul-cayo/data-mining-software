@@ -34,7 +34,7 @@ function DataViewModel() {
 
   self.fileName = ko.observable('');
   self.fileExt = ko.observable('');
-  
+
   self.relation = ko.observable('');
   self.generalInfo = ko.observable('');
   self.nullChar = ko.observable('');
@@ -47,7 +47,7 @@ function DataViewModel() {
   self.firstBivariate = ko.observable('');
   self.secondBivariate = ko.observable('');
 
-  self.valueTypeOptions = ['nominal', 'numerico', 'ordinal'];
+  self.valueTypeOptions = ['nominal', 'numerico' /*, ordinal*/];
 
   // *** Computed values ***
   self.noInstances = ko.pureComputed(function () {
@@ -139,15 +139,10 @@ function DataViewModel() {
   }
 
   self.updateRegex = function (index) {
-    $('#attr' + index).modal('hide');
-    showLoading();
-    setTimeout(() => {
-      for (let row of self.grid()) {
-        let newRegex = self.attributesInfo()[index].regex();
-        row.slots()[index].regex(newRegex);
-      }
-      hideLoading();
-    }, 0);
+    for (let row of self.grid()) {
+      let newRegex = self.attributesInfo()[index].regex();
+      row.slots()[index].regex(newRegex);
+    }
   }
 
   self.updateAttrInfo = function (index) {

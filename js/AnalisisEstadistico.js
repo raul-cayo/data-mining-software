@@ -5,7 +5,6 @@ function univariateChange() {
       for (let i = 1; i < vm.grid().length; i++) {
         data.push( vm.grid()[i].slots()[vm.univariate().index].value());
       }
-      
      
       var containerWidth = $('#univariate').width() - 30;
       var containerTenth = Math.floor(containerWidth / 10);
@@ -73,4 +72,39 @@ function getModes(array) {
   }
 
   return modes;
+}
+
+function bivariateChange() {
+  setTimeout(() => {
+    if (vm.firstBivariate() && vm.secondBivariate()) {
+      if (vm.firstBivariate().type === 'numerico' && vm.secondBivariate().type === 'numerico') {
+        
+        var data = [{
+          x: [1, 2, 3, 4, 5],
+          y: [1, 6, 3, 6, 1],
+          mode: 'markers',
+          type: 'scatter',
+          marker: { size: 12 }
+        }];
+        
+        var layout = { 
+          xaxis: {
+            range: [ 0.75, 5.25 ] 
+          },
+          yaxis: {
+            range: [0, 8]
+          },
+          title:'X: Edad, Y: Edad'
+        };
+        
+        Plotly.newPlot('bi-scatterplot', data, layout, {showSendToCloud: true});
+      }
+      else if (vm.firstBivariate().type === 'nominal' && vm.secondBivariate().type === 'nominal') {
+        console.log('show chi^2')
+      }
+      else {
+        console.log('Los tipos de datos son diferentes')
+      }
+    }
+  }, 500);
 }
