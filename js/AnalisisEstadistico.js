@@ -1,4 +1,4 @@
-function drawBoxplot() {
+function univariateChange() {
   setTimeout(() => {
     if (vm.univariate()) {
       var data = [];
@@ -25,7 +25,6 @@ function drawBoxplot() {
         pointpos: -1.8
       };
 
-      console.log(vm.univariate().type);
       if (vm.univariate().type === 'numerico') {
         layout.margin.b = containerTenth / 2;
         dataConfig.type = 'box';

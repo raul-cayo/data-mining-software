@@ -34,6 +34,7 @@ function DataViewModel() {
 
   self.fileName = ko.observable('');
   self.fileExt = ko.observable('');
+  
   self.relation = ko.observable('');
   self.generalInfo = ko.observable('');
   self.nullChar = ko.observable('');
@@ -42,6 +43,7 @@ function DataViewModel() {
   self.uniAvg = ko.observable('');
   self.uniMed = ko.observable('');
   self.uniMode = ko.observable('');
+
   self.firstBivariate = ko.observable('');
   self.secondBivariate = ko.observable('');
 
