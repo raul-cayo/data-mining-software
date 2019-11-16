@@ -132,7 +132,6 @@ function bivariateChange() {
         vm.pearson((xMinusAvgyMinusAvgSum / (xValues.length * xStdDesv * yStdDesv)).toFixed(4));
       }
       else if (vm.firstBivariate().type === 'nominal' && vm.secondBivariate().type === 'nominal') {
-        // Calculate chi-cuadrada and Tschuprow
         let xValues = [];
         let yValues = [];
 
@@ -140,50 +139,56 @@ function bivariateChange() {
           xValues.push( vm.grid()[i].slots()[vm.firstBivariate().index].value());
           yValues.push( vm.grid()[i].slots()[vm.secondBivariate().index].value());
         }
-        
-        vm.freqColumns( [...new Set(xValues), 'total'] );
-        vm.freqRows( [...new Set(yValues), 'total'] );
-        let localFreqTable = {};
+
+        /* Freq Table Example
+        localFreq = {
+          hombre: { ficcion: 250, noFiccion: 50, _total: 300 },
+          mujer: { ficcion: 200, noFiccion: 1000, _total: 1200 },
+          _total: { _total: 1500, ficcion: 450, noFiccion: 1050 }
+        }
+        */
+        let localFreq = {};
+        vm.freqColumns( [...new Set(xValues), '_total'] );
+        vm.freqRows( [...new Set(yValues), '_total'] );
 
         for (let column of vm.freqColumns()) {
-          localFreqTable[column] = {};
+          localFreq[column] = {};
           for(let row of vm.freqRows()) {
-            localFreqTable[column][row] = 0;
+            localFreq[column][row] = 0;
           }
         }
-
-        console.log(localFreqTable);
 
         for (let i = 0; i < xValues.length; i++) {
-          localFreqTable[xValues[i]][yValues[i]] += 1;
-          localFreqTable[xValues[i]]['total'] += 1;
-          localFreqTable['total'][yValues[i]] += 1;
-          localFreqTable['total']['total'] += 1;
+          localFreq[xValues[i]][yValues[i]] += 1;
+          localFreq[xValues[i]]['_total'] += 1;
+          localFreq['_total'][yValues[i]] += 1;
+          localFreq['_total']['_total'] += 1;
         }
 
-        console.log(localFreqTable);
-        vm.freqTable(localFreqTable);
-
-        //EXEJPLO
-        /*vm.freqTable({
-          hombre: {
-            ficcion: 250,
-            noFiccion: 50,
-            total: 300
-          },
-          mujer: {
-            ficcion: 200,
-            noFiccion: 1000,
-            total: 1200
-          },
-          total: {
-            total: 1500,
-            ficcion: 450,
-            noFiccion: 1050,
-          }
-        });*/
-
+        vm.freqTable(localFreq);
         vm.freqReady(true);
+
+        // Calculate Chi-Cuadrada (x2) and Tschuprow
+        let localX2 = 0;
+        for (let column of vm.freqColumns()) {
+          if (column !== '_total') {
+            for(let row of vm.freqRows()) {
+              if (row !== '_total') {
+                let e = localFreq[column]['_total'] * localFreq['_total'][row] / localFreq['_total']['_total'];
+                let oe2 = (localFreq[column][row] - e) * (localFreq[column][row] - e);
+                localX2 += (oe2 / e);
+              }
+            }
+          }
+        }
+
+        let c = vm.freqColumns().length - 2;
+        let r = vm.freqRows().length - 2;
+        let root = Math.sqrt(c * r);
+        let nroot = localFreq['_total']['_total'] * root;
+
+        vm.x2(localX2.toFixed(2));
+        vm.tschuprow( Math.sqrt(localX2 / nroot).toFixed(2) );
       }
     }
   }, 500);

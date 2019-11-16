@@ -51,6 +51,8 @@ function DataViewModel() {
   self.freqRows = ko.observableArray([]);
   self.freqTable = ko.observable(false);
   self.freqReady = ko.observable(false);
+  self.x2 = ko.observable('');
+  self.tschuprow = ko.observable('');
 
   self.valueTypeOptions = ['nominal', 'numerico' /*, ordinal*/];
 
