@@ -47,6 +47,10 @@ function DataViewModel() {
   self.firstBivariate = ko.observable('');
   self.secondBivariate = ko.observable('');
   self.pearson = ko.observable('');
+  self.freqColumns = ko.observableArray([]);
+  self.freqRows = ko.observableArray([]);
+  self.freqTable = ko.observable(false);
+  self.freqReady = ko.observable(false);
 
   self.valueTypeOptions = ['nominal', 'numerico' /*, ordinal*/];
 

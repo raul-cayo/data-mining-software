@@ -69,6 +69,7 @@ function getModes(array) {
 }
 
 function bivariateChange() {
+  vm.freqReady(false);
   setTimeout(() => {
     if (vm.firstBivariate() && vm.secondBivariate()) {
       if (vm.firstBivariate().type === 'numerico' && vm.secondBivariate().type === 'numerico') {
@@ -127,19 +128,62 @@ function bivariateChange() {
         }
         let xStdDesv = Math.sqrt(xMinusAvg2Sum / xValues.length);
         let yStdDesv = Math.sqrt(yMinusAvg2Sum / yValues.length);
-        
-        console.log('xStdDesv: ' + xStdDesv);
-        console.log('yStdDesv: ' + yStdDesv);
-        console.log('xMinusAvgyMinusAvgSum: ' + xMinusAvgyMinusAvgSum);
-        console.log('yStdDesv: ' + yStdDesv);
 
         vm.pearson((xMinusAvgyMinusAvgSum / (xValues.length * xStdDesv * yStdDesv)).toFixed(4));
       }
       else if (vm.firstBivariate().type === 'nominal' && vm.secondBivariate().type === 'nominal') {
-        console.log('show chi^2');
-      }
-      else {
-        console.log('Los tipos de datos son diferentes');
+        // Calculate chi-cuadrada and Tschuprow
+        let xValues = [];
+        let yValues = [];
+
+        for (let i = 1; i < vm.grid().length; i++) {
+          xValues.push( vm.grid()[i].slots()[vm.firstBivariate().index].value());
+          yValues.push( vm.grid()[i].slots()[vm.secondBivariate().index].value());
+        }
+        
+        vm.freqColumns( [...new Set(xValues), 'total'] );
+        vm.freqRows( [...new Set(yValues), 'total'] );
+        let localFreqTable = {};
+
+        for (let column of vm.freqColumns()) {
+          localFreqTable[column] = {};
+          for(let row of vm.freqRows()) {
+            localFreqTable[column][row] = 0;
+          }
+        }
+
+        console.log(localFreqTable);
+
+        for (let i = 0; i < xValues.length; i++) {
+          localFreqTable[xValues[i]][yValues[i]] += 1;
+          localFreqTable[xValues[i]]['total'] += 1;
+          localFreqTable['total'][yValues[i]] += 1;
+          localFreqTable['total']['total'] += 1;
+        }
+
+        console.log(localFreqTable);
+        vm.freqTable(localFreqTable);
+
+        //EXEJPLO
+        /*vm.freqTable({
+          hombre: {
+            ficcion: 250,
+            noFiccion: 50,
+            total: 300
+          },
+          mujer: {
+            ficcion: 200,
+            noFiccion: 1000,
+            total: 1200
+          },
+          total: {
+            total: 1500,
+            ficcion: 450,
+            noFiccion: 1050,
+          }
+        });*/
+
+        vm.freqReady(true);
       }
     }
   }, 500);

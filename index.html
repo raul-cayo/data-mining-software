@@ -305,7 +305,7 @@
               </div>
             </div>
 
-            <div data-bind="if: firstBivariate && secondBivariate">
+            <div data-bind="if: firstBivariate() && secondBivariate()">
               <div data-bind="if: firstBivariate().type === 'numerico' && secondBivariate().type === 'numerico'">
                 <div id="bi-scatterplot" class="mx-auto"></div>
                 <div class="m-2 border border-info rounded row">
@@ -314,13 +314,35 @@
                   </p>
                 </div>
               </div>
-              <div data-bind="if: firstBivariate().type === 'nominal' && secondBivariate().type === 'nominal'">
+
+              <div data-bind="if: firstBivariate().type === 'nominal' && secondBivariate().type === 'nominal' && freqReady()">  
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col"></th>
+                      <!-- ko foreach: freqColumns -->
+                        <th data-bind="text: $data"></th>
+                      <!-- /ko -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- ko foreach: freqRows -->
+                      <tr>
+                        <th data-bind="text: $data" scope="row"></th>
+                        <!-- ko foreach: $root.freqColumns -->
+                          <td data-bind="text: $root.freqTable()[$data][$parentContext.$data]"></td>
+                        <!-- /ko -->
+                      </tr>
+                    <!-- /ko -->
+                  </tbody>
+                </table>
                 <div class="m-2 border border-info rounded row">
                   <p class="text-center my-2 col-12">Chi Cuadrada: 
                     <span data-bind="text: pearson"></span>
                   </p>
                 </div>
               </div>
+
               <div data-bind="if: firstBivariate().type !== secondBivariate().type">
                 <div class="m-2 border border-info rounded row">
                   <p class="text-center my-2 col-12">
