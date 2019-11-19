@@ -54,6 +54,8 @@ function DataViewModel() {
   self.x2 = ko.observable('');
   self.tschuprow = ko.observable('');
 
+  self.attrToClean = ko.observable('');
+
   self.valueTypeOptions = ['nominal', 'numerico' /*, ordinal*/];
 
   // *** Computed values ***

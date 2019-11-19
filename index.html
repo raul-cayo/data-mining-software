@@ -361,8 +361,56 @@
       </div>
     </div>
 
+    <!-- ***** LIMPIEZA DE DATOS ***** -->
+    <div class="tab-pane fade" id="nav-clean" data-bind="if: fileName">
+      <div class="col-12">
+        <div id="clean-data" class="container-fluid border border-dark rounded">
+          <select class="form-control my-2"
+            data-bind="options: attributeOptions,
+            optionsText: 'name',
+            value: attrToClean,
+            optionsCaption: 'Seleccione Atributo'"
+            onchange="univariateChange()"></select>
+
+          <div data-bind="if: attrToClean">
+            <div class="row" data-bind="if: attrToClean().type === 'numerico'">
+              <div class="col-12 col-md-3 p-2 text-center">
+                <button type="button" class="btn btn-outline-primary"
+                  onClick="">Llenar Valores Faltantes</button>
+              </div>
+              <div class="col-12 col-md-3 p-1 text-center">
+                <button type="button" class="btn btn-outline-primary"
+                  onClick="">Correccion de Outliers</button>
+              </div>
+              <div class="col-12 col-md-3 p-1 text-center">
+                <button type="button" class="btn btn-outline-primary"
+                  onClick="">Buscar y Reemplazar</button>
+              </div>
+              <div class="col-12 col-md-3 p-1 text-center">
+                <button type="button" class="btn btn-outline-primary"
+                  onClick="">Normalizar</button>
+              </div>
+            </div>
+            <div class="row" data-bind="if: attrToClean().type === 'nominal'">
+              <div class="col-12 col-md-4 p-1 text-center">
+                <button type="button" class="btn btn-outline-primary"
+                  onClick="">Llenar Valores Faltantes</button>
+              </div>
+              <div class="col-12 col-md-4 p-1 text-center">
+                <button type="button" class="btn btn-outline-primary"
+                  onClick="">Buscar y Reemplazar</button>
+              </div>
+              <div class="col-12 col-md-4 p-1 text-center">
+                <button type="button" class="btn btn-outline-primary"
+                  onClick="">Corregir Errores Tipográficos</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- *** Other sections *** -->
-    <div class="tab-pane fade" id="nav-clean">Limpieza de Datos</div>
     <div class="tab-pane fade" id="nav-learning">Aprendizaje Máquina</div>
   </div>
 
