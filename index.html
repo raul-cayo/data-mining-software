@@ -364,7 +364,7 @@
     <!-- ***** LIMPIEZA DE DATOS ***** -->
     <div class="tab-pane fade" id="nav-clean" data-bind="if: fileName">
       <div class="col-12">
-        <div id="clean-data" class="container-fluid border border-dark rounded">
+        <div id="clean-data" class="container-fluid border border-dark rounded mt-4">
           <select class="form-control my-2"
             data-bind="options: attributeOptions,
             optionsText: 'name',
@@ -373,37 +373,58 @@
             onchange="univariateChange()"></select>
 
           <div data-bind="if: attrToClean">
-            <div class="row" data-bind="if: attrToClean().type === 'numerico'">
-              <div class="col-12 col-md-3 p-2 text-center">
-                <button type="button" class="btn btn-outline-primary"
-                  onClick="">Llenar Valores Faltantes</button>
+            <div class="row p-2">
+              <!-- *** Attribute Instances *** -->
+              <div class="col-6 border-right border-info">
+                  <table class="table">
+                    <tbody data-bind="foreach: grid">
+                      <tr data-bind="if: $index() !== 0">
+                        <td>
+                          <span data-bind="text: slots()[$root.attrToClean().index].value"></span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
               </div>
-              <div class="col-12 col-md-3 p-1 text-center">
-                <button type="button" class="btn btn-outline-primary"
-                  onClick="">Correccion de Outliers</button>
+
+              <!-- *** Actions *** -->
+              <div class="col-6">
+                <!-- *** Numeric *** -->
+                <div class="row sticky-top pt-3" data-bind="if: attrToClean().type === 'numerico'">
+                  <div class="col-12 p-2 text-center">
+                    <button type="button" class="btn btn-outline-primary"
+                      onClick="">Llenar Valores Faltantes</button>
+                  </div>
+                  <div class="col-12 p-2 text-center">
+                    <button type="button" class="btn btn-outline-primary"
+                      onClick="">Deteccion y Correccion de Outliers</button>
+                  </div>
+                  <div class="col-12 p-2 text-center">
+                    <button type="button" class="btn btn-outline-primary"
+                      onClick="">Buscar y Reemplazar</button>
+                  </div>
+                  <div class="col-12 p-2 text-center">
+                    <button type="button" class="btn btn-outline-primary"
+                      onClick="">Normalizar</button>
+                  </div>
+                </div>
+                <!-- *** Nominal *** -->
+                <div class="row sticky-top pt-3" data-bind="if: attrToClean().type === 'nominal'">
+                  <div class="col-12 p-2 text-center">
+                    <button type="button" class="btn btn-outline-primary"
+                      onClick="">Llenar Valores Faltantes</button>
+                  </div>
+                  <div class="col-12 p-2 text-center">
+                    <button type="button" class="btn btn-outline-primary"
+                      onClick="">Buscar y Reemplazar</button>
+                  </div>
+                  <div class="col-12 p-2 text-center">
+                    <button type="button" class="btn btn-outline-primary"
+                      onClick="">Detección de Errores Tipográficos</button>
+                  </div>
+                </div>
               </div>
-              <div class="col-12 col-md-3 p-1 text-center">
-                <button type="button" class="btn btn-outline-primary"
-                  onClick="">Buscar y Reemplazar</button>
-              </div>
-              <div class="col-12 col-md-3 p-1 text-center">
-                <button type="button" class="btn btn-outline-primary"
-                  onClick="">Normalizar</button>
-              </div>
-            </div>
-            <div class="row" data-bind="if: attrToClean().type === 'nominal'">
-              <div class="col-12 col-md-4 p-1 text-center">
-                <button type="button" class="btn btn-outline-primary"
-                  onClick="">Llenar Valores Faltantes</button>
-              </div>
-              <div class="col-12 col-md-4 p-1 text-center">
-                <button type="button" class="btn btn-outline-primary"
-                  onClick="">Buscar y Reemplazar</button>
-              </div>
-              <div class="col-12 col-md-4 p-1 text-center">
-                <button type="button" class="btn btn-outline-primary"
-                  onClick="">Corregir Errores Tipográficos</button>
-              </div>
+
             </div>
           </div>
         </div>
