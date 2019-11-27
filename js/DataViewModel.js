@@ -224,6 +224,19 @@ function DataViewModel() {
       hideLoading();
     }, 0);
   }
+
+  self.fillMisingValues = function (fillWith) {
+    $('#fillMissingValues-modal').modal('hide');
+    showLoading();
+    setTimeout(() => {
+      for (let i = 1; i < self.grid().length; i++) {
+        if (self.grid()[i].slots()[self.attrToClean().index].value() === self.nullChar()) {
+          self.grid()[i].slots()[self.attrToClean().index].value(fillWith);
+        }
+      }
+      hideLoading();
+    }, 0);
+  }
 }
 
 let vm = new DataViewModel();

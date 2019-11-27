@@ -9,12 +9,6 @@ function fillMissingValuesClicked(data) {
 }
 
 function fillMissingValuesFromModal() {
-  if (vm.attrToClean()) {
-    let fillWith = document.querySelector('#fillMissingValues-body .fill-with').value;
-    for (let i = 1; i < vm.grid().length; i++) {
-      if (vm.grid()[i].slots()[vm.attrToClean().index].value() === vm.nullChar()) {
-        vm.grid()[i].slots()[vm.attrToClean().index].value(fillWith);
-      }
-    }
-  }
+  let fillWith = document.querySelector('#fillMissingValues-body .fill-with').value;
+  vm.fillMisingValues(fillWith);    
 }
