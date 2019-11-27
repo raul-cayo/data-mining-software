@@ -7,9 +7,9 @@ function Slot(value, regex) {
 
   self.status = ko.pureComputed(function () {
     if (self.value() === vm.nullChar()){
-      return 'border-warning';
+      return 'border border-warning';
     }
-    return self.value().match(new RegExp(self.regex())) ? '' : 'border-danger';
+    return self.value().match(new RegExp(self.regex())) ? '' : 'border border-danger';
   }, self);
 }
 
@@ -55,6 +55,7 @@ function DataViewModel() {
   self.tschuprow = ko.observable('');
 
   self.attrToClean = ko.observable('');
+  self.attrToCleanMode = ko.observable('');
 
   self.valueTypeOptions = ['nominal', 'numerico' /*, ordinal*/];
 

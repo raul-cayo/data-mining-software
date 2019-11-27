@@ -85,7 +85,7 @@
             <!-- *** Slot *** -->
             <td class="p-1">
               <div data-bind="if: $parentContext.$index()">
-                <input data-bind="textInput: value, class: status" type="text" class="form-control border" />
+                <input data-bind="textInput: value, class: status" type="text" class="form-control" />
               </div>
 
               <!-- *** Grid Attributes Header *** -->
@@ -157,15 +157,15 @@
       <!-- *** Actions *** -->
       <div id="actions-input" class="bg-white border-top border-dark fixed-bottom p-3 d-flex justify-content-around">
         <div>
-          <button id="btn-addAttr" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
+          <button type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
             data-target="#addAttr-modal" data-bind="enable: fileName">Agregar Atributo</button>
-          <button id="btn-addInstance" type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
+          <button type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
             data-target="#addInstance-modal" data-bind="enable: fileName">Agregar Instancia</button>
         </div>
         <div>
-          <button id="btn-save" type="button" class="btn btn-outline-success mx-2"
+          <button type="button" class="btn btn-outline-success mx-2"
             onClick="saveFile(vm.fileName(), vm.fileExt())" data-bind="enable: fileName">Guardar</button>
-          <button id="btn-saveAs" type="button" class="btn btn-outline-success mx-2" data-toggle="modal"
+          <button type="button" class="btn btn-outline-success mx-2" data-toggle="modal"
             data-target="#saveAs-modal" data-bind="enable: fileName">Guardar Como</button>
         </div>
       </div>
@@ -369,18 +369,20 @@
             data-bind="options: attributeOptions,
             optionsText: 'name',
             value: attrToClean,
-            optionsCaption: 'Seleccione Atributo'"
-            onchange="univariateChange()"></select>
+            optionsCaption: 'Seleccione Atributo'"></select>
 
           <div data-bind="if: attrToClean">
             <div class="row p-2">
               <!-- *** Attribute Instances *** -->
               <div class="col-6 border-right border-info">
-                  <table class="table">
+                  <table class="table table-striped">
                     <tbody data-bind="foreach: grid">
                       <tr data-bind="if: $index() !== 0">
-                        <td>
-                          <span data-bind="text: slots()[$root.attrToClean().index].value"></span>
+                        <td class="p-1">
+                          <div data-bind="class: slots()[$root.attrToClean().index].status" 
+                            class="m-1 px-2 rounded" style="height: 28px;">
+                              <span data-bind="text: slots()[$root.attrToClean().index].value"></span>
+                          </div>
                         </td>
                       </tr>
                     </tbody>
@@ -392,8 +394,9 @@
                 <!-- *** Numeric *** -->
                 <div class="row sticky-top pt-3" data-bind="if: attrToClean().type === 'numerico'">
                   <div class="col-12 p-2 text-center">
-                    <button type="button" class="btn btn-outline-primary"
-                      onClick="">Llenar Valores Faltantes</button>
+                      <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                      data-target="#fillMissingValues-modal"
+                      onclick="fillMissingValuesClicked()">Llenar Valores Faltantes</button>
                   </div>
                   <div class="col-12 p-2 text-center">
                     <button type="button" class="btn btn-outline-primary"
@@ -411,8 +414,9 @@
                 <!-- *** Nominal *** -->
                 <div class="row sticky-top pt-3" data-bind="if: attrToClean().type === 'nominal'">
                   <div class="col-12 p-2 text-center">
-                    <button type="button" class="btn btn-outline-primary"
-                      onClick="">Llenar Valores Faltantes</button>
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                      data-target="#fillMissingValues-modal"
+                      onclick="fillMissingValuesClicked()">Llenar Valores Faltantes</button>
                   </div>
                   <div class="col-12 p-2 text-center">
                     <button type="button" class="btn btn-outline-primary"
@@ -429,6 +433,30 @@
           </div>
         </div>
       </div>
+
+      <!-- *** Fill Missing Values Modal *** -->
+      <div class="modal" id="fillMissingValues-modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Llenar Valores Faltantes</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div id="fillMissingValues-body" class="modal-body">
+              <label class="mt-2">Valor</label>
+              <input type="text" class="form-control mb-2 fill-with" />
+              <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
+                  Recomendacion (Moda): 
+                  <span data-bind="text: attrToCleanMode"></span>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-primary" onClick="fillMissingValuesFromModal()">Llenar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- *** Other sections *** -->
@@ -446,6 +474,7 @@
   <script src="js/DataViewModel.js"></script>
   <script src="js/EntradaDatos.js"></script>
   <script src="js/AnalisisEstadistico.js"></script>
+  <script src="js/LimpiezaDatos.js"></script>
   
 
 
