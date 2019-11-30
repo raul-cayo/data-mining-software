@@ -57,6 +57,8 @@ function DataViewModel() {
   self.attrToClean = ko.observable('');
   self.criteria = ko.observable('');
   self.recommendation = ko.observable('');
+  self.typos = ko.observableArray([]);
+  self.fixes = ko.observableArray([]);
 
   self.valueTypeOptions = ['nominal', 'numerico' /*, ordinal*/];
 
@@ -246,6 +248,22 @@ function DataViewModel() {
       for (let i = 1; i < self.grid().length; i++) {
         if (self.grid()[i].slots()[self.attrToClean().index].value() == searchVal) {
           self.grid()[i].slots()[self.attrToClean().index].value(replaceVal);
+        }
+      }
+      hideLoading();
+    }, 0);
+  }
+
+  self.fixTypos = function () {
+    $('#fixTypos-modal').modal('hide');
+    showLoading();
+    setTimeout(() => {
+      for (let i = 1; i < self.grid().length; i++) {
+        for (let j = 0; j < self.typos().length; j++){
+          if(self.grid()[i].slots()[self.attrToClean().index].value() === self.typos()[j]) {
+            self.grid()[i].slots()[self.attrToClean().index].value(self.fixes()[j]);
+            break;
+          }
         }
       }
       hideLoading();

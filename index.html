@@ -423,8 +423,9 @@
                       data-target="#searchAndReplace-modal">Buscar y Reemplazar</button>
                   </div>
                   <div class="col-12 p-2 text-center">
-                    <button type="button" class="btn btn-outline-primary"
-                      onClick="">Detección de Errores Tipográficos</button>
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                      data-target="#fixTypos-modal"
+                      onclick="fixTyposClicked()">Detección de Errores Tipográficos</button>
                   </div>
                 </div>
               </div>
@@ -459,24 +460,50 @@
 
       <!-- *** Search and Replace Modal *** -->
       <div class="modal" id="searchAndReplace-modal">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Buscar y Reemplazar</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-              </div>
-              <div id="searchAndReplace-body" class="modal-body">
-                <label class="mt-2">Buscar</label>
-                <input type="text" class="form-control mb-2 search" />
-                <label class="mt-2">Reemplazar con</label>
-                <input type="text" class="form-control mb-2 replace" />
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary" onClick="searchAndReplaceFromModal()">Reemplazar</button>
-              </div>
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Buscar y Reemplazar</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div id="searchAndReplace-body" class="modal-body">
+              <label class="mt-2">Buscar</label>
+              <input type="text" class="form-control mb-2 search" />
+              <label class="mt-2">Reemplazar con</label>
+              <input type="text" class="form-control mb-2 replace" />
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-primary" onClick="searchAndReplaceFromModal()">Reemplazar</button>
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- *** Fix Modal *** -->
+      <div class="modal" id="fixTypos-modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Detección de Errores Tipográficos</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div id="fixTypos-body" class="modal-body">
+              <label class="mt-2">Error -> Corrección</label>
+              <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
+                <!-- ko foreach: typos -->
+                <p class="my-1">
+                  <span data-bind="text: $data"></span> -> 
+                  <span data-bind="text: $root.fixes()[$index()]"></span>
+                </p>
+                <!-- /ko -->
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-primary" onClick="fixTyposFromModal()">Corregir Errores</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div>
 
