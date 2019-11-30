@@ -31,17 +31,19 @@ function univariateChange() {
       Plotly.newPlot('uni-boxplot', [dataConfig], layout);
 
       // Calculate median mode and mean
-      data.sort();
+      if (vm.univariate().type === 'numerico') {
+        data.sort();
 
-      let sum = 0;
-      let firstMid = parseInt(data[Math.floor(data.length / 2)]);
-      let secondMid = parseInt(data[data.length / 2 - 1]);
-      for (let value of data) {
-        sum += parseInt(value);
+        let sum = 0;
+        let firstMid = parseInt(data[Math.floor(data.length / 2)]);
+        let secondMid = parseInt(data[data.length / 2 - 1]);
+        for (let value of data) {
+          sum += parseInt(value);
+        }
+        vm.uniAvg((sum / data.length).toFixed(2));
+        vm.uniMed(data.length % 2 === 0 ? (firstMid + secondMid) / 2 : firstMid);
+        vm.uniMode(getModes(data).join(', '));
       }
-      vm.uniAvg((sum / data.length).toFixed(2));
-      vm.uniMed(data.length % 2 === 0 ? (firstMid + secondMid) / 2 : firstMid);
-      vm.uniMode(getModes(data).join(', '));
     }
   }, 500);
 }

@@ -55,7 +55,8 @@ function DataViewModel() {
   self.tschuprow = ko.observable('');
 
   self.attrToClean = ko.observable('');
-  self.attrToCleanMode = ko.observable('');
+  self.criteria = ko.observable('');
+  self.recommendation = ko.observable('');
 
   self.valueTypeOptions = ['nominal', 'numerico' /*, ordinal*/];
 
@@ -225,13 +226,26 @@ function DataViewModel() {
     }, 0);
   }
 
-  self.fillMisingValues = function (fillWith) {
+  self.fillMissingValues = function (fillWith) {
     $('#fillMissingValues-modal').modal('hide');
     showLoading();
     setTimeout(() => {
       for (let i = 1; i < self.grid().length; i++) {
         if (self.grid()[i].slots()[self.attrToClean().index].value() === self.nullChar()) {
           self.grid()[i].slots()[self.attrToClean().index].value(fillWith);
+        }
+      }
+      hideLoading();
+    }, 0);
+  }
+
+  self.searchAndReplace = function (searchVal, replaceVal) {
+    $('#searchAndReplace-modal').modal('hide');
+    showLoading();
+    setTimeout(() => {
+      for (let i = 1; i < self.grid().length; i++) {
+        if (self.grid()[i].slots()[self.attrToClean().index].value() == searchVal) {
+          self.grid()[i].slots()[self.attrToClean().index].value(replaceVal);
         }
       }
       hideLoading();
