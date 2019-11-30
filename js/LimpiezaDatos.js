@@ -129,6 +129,14 @@ function fixOutliersFromModal(all) {
   vm.fixOutliers(replaceVal, all);
 }
 
+function normalizeFromModal() {
+  let newMin = document.querySelector('#normalize-body .new-min').value;
+  let newMax = document.querySelector('#normalize-body .new-max').value;
+  if(newMin && newMax) {
+    vm.normilize(parseFloat(newMin), parseFloat(newMax));
+  }
+}
+
 // Util
 function levenshteinDistance(s1, len1, s2, len2) {
   let cost;

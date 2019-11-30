@@ -394,15 +394,16 @@
                   </div>
                   <div class="col-12 p-2 text-center">
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal"
-                      data-target="#fixOutliers-modal"
-                      onClick="fixOutliersClicked()">Deteccion y Correccion de Outliers</button>
+                      data-target="#fixOutliers-modal" onClick="fixOutliersClicked()">Deteccion y Correccion de
+                      Outliers</button>
                   </div>
                   <div class="col-12 p-2 text-center">
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal"
                       data-target="#searchAndReplace-modal">Buscar y Reemplazar</button>
                   </div>
                   <div class="col-12 p-2 text-center">
-                    <button type="button" class="btn btn-outline-primary" onClick="">Normalizar</button>
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                    data-target="#normalize-modal">Normalizar</button>
                   </div>
                 </div>
                 <!-- *** Nominal *** -->
@@ -509,46 +510,67 @@
 
       <!-- *** Fix Outliers Modal *** -->
       <div class="modal" id="fixOutliers-modal">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Detección y Correción de Outliers</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Detección y Correción de Outliers</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div id="fixOutliers-body" class="modal-body">
+              <label class="mt-2">Posibles Outliers (1.5 IQR)</label>
+              <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
+                <!-- ko ifnot: possibleOutliers().length -->
+                <p class="my-1">No se encontraron posibles outliers</p>
+                <!-- /ko -->
+                <span data-bind="text: possibleOutliers().join(', ')"></span>
               </div>
-              <div id="fixOutliers-body" class="modal-body">
-                <label class="mt-2">Posibles Outliers (1.5 IQR)</label>
-                <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
-                  <!-- ko ifnot: possibleOutliers().length -->
-                  <p class="my-1">No se encontraron posibles outliers</p>
-                  <!-- /ko -->
-                  <span data-bind="text: possibleOutliers().join(', ')"></span>
-                </div>
-                <label class="mt-2">Outliers (3 IQR)</label>
-                <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
-                  <!-- ko ifnot: outliers().length -->
-                  <p class="my-1">No se encontraron outliers</p>
-                  <!-- /ko -->
-                  <span data-bind="text: outliers().join(', ')"></span>
-                </div>
-                <label class="mt-5">Reemplazar con</label>
-                <input type="text" class="form-control mb-2 replace" 
-                  data-bind="enable: outliers().length || possibleOutliers().length" />
-                <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
-                    Recomendacion (<span data-bind="text: criteria"></span>):
-                    <span data-bind="text: recommendation"></span>
-                  </div>
+              <label class="mt-2">Outliers (3 IQR)</label>
+              <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
+                <!-- ko ifnot: outliers().length -->
+                <p class="my-1">No se encontraron outliers</p>
+                <!-- /ko -->
+                <span data-bind="text: outliers().join(', ')"></span>
               </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary"
-                  data-bind="enable: outliers().length || possibleOutliers().length"
-                  onClick="fixOutliersFromModal(true)">Todos</button>
-                <button type="button" class="btn btn-outline-primary"
-                  data-bind="enable: outliers().length"
-                  onClick="fixOutliersFromModal(false)">Solo 3 IQR</button>
+              <label class="mt-5">Reemplazar con</label>
+              <input type="text" class="form-control mb-2 replace"
+                data-bind="enable: outliers().length || possibleOutliers().length" />
+              <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
+                Recomendacion (<span data-bind="text: criteria"></span>):
+                <span data-bind="text: recommendation"></span>
               </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-primary"
+                data-bind="enable: outliers().length || possibleOutliers().length"
+                onClick="fixOutliersFromModal(true)">Todos</button>
+              <button type="button" class="btn btn-outline-primary" data-bind="enable: outliers().length"
+                onClick="fixOutliersFromModal(false)">Solo 3 IQR</button>
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- *** Normalize Modal *** -->
+      <div class="modal" id="normalize-modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Normalizar</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div id="normalize-body" class="modal-body">
+              <label class="mt-2">Nuevo Mínimo</label>
+              <input type="text" class="form-control mb-2 new-min" value="0" />
+              <label class="mt-2">Nuevo Máximo</label>
+              <input type="text" class="form-control mb-2 new-max" value="1" />
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-primary"
+                onClick="normalizeFromModal()">Normalizar</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div>
 

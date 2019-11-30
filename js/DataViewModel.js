@@ -286,6 +286,30 @@ function DataViewModel() {
     }, 0);
   }
 
+  self.normilize = function (newMin, newMax) {
+    $('#normalize-modal').modal('hide');
+    showLoading();
+    setTimeout(() => {
+      let minVal = parseFloat(self.grid()[1].slots()[self.attrToClean().index].value());
+      let maxVal = parseFloat(self.grid()[1].slots()[self.attrToClean().index].value());
+      for (let i = 2; i < self.grid().length; i++) {
+        if (minVal > parseFloat(self.grid()[i].slots()[self.attrToClean().index].value())) {
+          minVal = parseFloat(self.grid()[i].slots()[self.attrToClean().index].value());
+        }
+        if (maxVal < parseFloat(self.grid()[i].slots()[self.attrToClean().index].value())) {
+          maxVal = parseFloat(self.grid()[i].slots()[self.attrToClean().index].value());
+        }
+      }
+        
+      for (let i = 1; i < self.grid().length; i++) {
+        let currentValue = parseFloat(self.grid()[i].slots()[self.attrToClean().index].value());
+        let newValue = ((currentValue - minVal)/(maxVal - minVal)) * (newMax - newMin) + newMin;
+        self.grid()[i].slots()[self.attrToClean().index].value(newValue.toFixed(4));
+      }
+      hideLoading();
+    }, 0);
+  }
+
 }
 
 let vm = new DataViewModel();
