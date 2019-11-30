@@ -124,6 +124,11 @@ function fixTyposFromModal() {
   vm.fixTypos();
 }
 
+function fixOutliersFromModal(all) {
+  let replaceVal = document.querySelector('#fixOutliers-body .replace').value;
+  vm.fixOutliers(replaceVal, all);
+}
+
 // Util
 function levenshteinDistance(s1, len1, s2, len2) {
   let cost;

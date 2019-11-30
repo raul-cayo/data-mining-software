@@ -498,7 +498,7 @@
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary" data-bind="disable: !typos().length"
+              <button type="button" class="btn btn-outline-primary" data-bind="enable: typos().length"
                 onClick="fixTyposFromModal()">
                 Corregir Errores
               </button>
@@ -518,20 +518,21 @@
               <div id="fixOutliers-body" class="modal-body">
                 <label class="mt-2">Posibles Outliers (1.5 IQR)</label>
                 <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
-                  <!-- ko ifnot: possibleOutliers-->
-                  <p class="my-2">No se encontraron posibles outliers</p>
+                  <!-- ko ifnot: possibleOutliers().length -->
+                  <p class="my-1">No se encontraron posibles outliers</p>
                   <!-- /ko -->
                   <span data-bind="text: possibleOutliers().join(', ')"></span>
                 </div>
                 <label class="mt-2">Outliers (3 IQR)</label>
                 <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
-                  <!-- ko ifnot: outliers-->
-                  <p class="my-2">No se encontraron outliers</p>
+                  <!-- ko ifnot: outliers().length -->
+                  <p class="my-1">No se encontraron outliers</p>
                   <!-- /ko -->
                   <span data-bind="text: outliers().join(', ')"></span>
                 </div>
-                <label class="mt-2">Reemplazar con</label>
-                <input type="text" class="form-control mb-2 replace" />
+                <label class="mt-5">Reemplazar con</label>
+                <input type="text" class="form-control mb-2 replace" 
+                  data-bind="enable: outliers().length || possibleOutliers().length" />
                 <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
                     Recomendacion (<span data-bind="text: criteria"></span>):
                     <span data-bind="text: recommendation"></span>
@@ -539,9 +540,11 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-primary"
-                  onClick="fixOutliersFromModal()">Todos</button>
+                  data-bind="enable: outliers().length || possibleOutliers().length"
+                  onClick="fixOutliersFromModal(true)">Todos</button>
                 <button type="button" class="btn btn-outline-primary"
-                  onClick="fixOutliersFromModal()">Solo 3 IQR</button>
+                  data-bind="enable: outliers().length"
+                  onClick="fixOutliersFromModal(false)">Solo 3 IQR</button>
               </div>
             </div>
           </div>

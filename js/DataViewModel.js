@@ -271,6 +271,21 @@ function DataViewModel() {
       hideLoading();
     }, 0);
   }
+
+  self.fixOutliers = function (replaceVal, all) {
+    $('#fixOutliers-modal').modal('hide');
+    showLoading();
+    setTimeout(() => {
+      for (let i = 1; i < self.grid().length; i++) {
+        let currentValue = parseInt(self.grid()[i].slots()[self.attrToClean().index].value());
+        if ( self.outliers().includes(currentValue) || (all && self.possibleOutliers().includes(currentValue)) ) {
+          self.grid()[i].slots()[self.attrToClean().index].value(replaceVal);
+        }
+      }
+      hideLoading();
+    }, 0);
+  }
+
 }
 
 let vm = new DataViewModel();
