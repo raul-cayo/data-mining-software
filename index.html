@@ -157,16 +157,16 @@
       <!-- *** Actions *** -->
       <div id="actions-input" class="bg-white border-top border-dark fixed-bottom p-3 d-flex justify-content-around">
         <div>
-          <button type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
-            data-target="#addAttr-modal" data-bind="enable: fileName">Agregar Atributo</button>
+          <button type="button" class="btn btn-outline-primary mx-2" data-toggle="modal" data-target="#addAttr-modal"
+            data-bind="enable: fileName">Agregar Atributo</button>
           <button type="button" class="btn btn-outline-primary mx-2" data-toggle="modal"
             data-target="#addInstance-modal" data-bind="enable: fileName">Agregar Instancia</button>
         </div>
         <div>
-          <button type="button" class="btn btn-outline-success mx-2"
-            onClick="saveFile(vm.fileName(), vm.fileExt())" data-bind="enable: fileName">Guardar</button>
-          <button type="button" class="btn btn-outline-success mx-2" data-toggle="modal"
-            data-target="#saveAs-modal" data-bind="enable: fileName">Guardar Como</button>
+          <button type="button" class="btn btn-outline-success mx-2" onClick="saveFile(vm.fileName(), vm.fileExt())"
+            data-bind="enable: fileName">Guardar</button>
+          <button type="button" class="btn btn-outline-success mx-2" data-toggle="modal" data-target="#saveAs-modal"
+            data-bind="enable: fileName">Guardar Como</button>
         </div>
       </div>
 
@@ -262,12 +262,10 @@
         <div class="col-12 col-md-6">
           <h3 class="mt-3 text-center">Univariable</h3>
           <div id="univariate" class="container-fluid border border-dark rounded">
-            <select class="form-control my-2"
-              data-bind="options: attributeOptions,
+            <select class="form-control my-2" data-bind="options: attributeOptions,
               optionsText: 'name',
               value: univariate,
-              optionsCaption: 'Seleccione Atributo'"
-              onchange="univariateChange()"></select>
+              optionsCaption: 'Seleccione Atributo'" onchange="univariateChange()"></select>
 
             <div data-bind="if: univariate">
               <div id="uni-boxplot" class="mx-auto"></div>
@@ -288,20 +286,16 @@
           <div class="container-fluid border border-dark rounded">
             <div class="row">
               <div class="col-12 col-md-6">
-                <select class="form-control my-2"
-                  data-bind="options: attributeOptions,
+                <select class="form-control my-2" data-bind="options: attributeOptions,
                   optionsText: 'name',
                   value: firstBivariate,
-                  optionsCaption: 'Seleccione Atributo'"
-                  onchange="bivariateChange()"></select>
+                  optionsCaption: 'Seleccione Atributo'" onchange="bivariateChange()"></select>
               </div>
               <div class="col-12 col-md-6">
-                <select class="form-control my-2"
-                  data-bind="options: attributeOptions,
+                <select class="form-control my-2" data-bind="options: attributeOptions,
                   optionsText: 'name',
                   value: secondBivariate,
-                  optionsCaption: 'Seleccione Atributo'"
-                  onchange="bivariateChange()"></select>
+                  optionsCaption: 'Seleccione Atributo'" onchange="bivariateChange()"></select>
               </div>
             </div>
 
@@ -309,38 +303,39 @@
               <div data-bind="if: firstBivariate().type === 'numerico' && secondBivariate().type === 'numerico'">
                 <div id="bi-scatterplot" class="mx-auto"></div>
                 <div class="m-2 border border-info rounded row">
-                  <p class="text-center my-2 col-12">Correlacion de Pearson: 
+                  <p class="text-center my-2 col-12">Correlacion de Pearson:
                     <span data-bind="text: pearson"></span>
                   </p>
                 </div>
               </div>
 
-              <div data-bind="if: firstBivariate().type === 'nominal' && secondBivariate().type === 'nominal' && freqReady()">  
+              <div
+                data-bind="if: firstBivariate().type === 'nominal' && secondBivariate().type === 'nominal' && freqReady()">
                 <table class="table">
                   <thead>
                     <tr>
                       <th scope="col"></th>
                       <!-- ko foreach: freqColumns -->
-                        <th data-bind="text: $data"></th>
+                      <th data-bind="text: $data"></th>
                       <!-- /ko -->
                     </tr>
                   </thead>
                   <tbody>
                     <!-- ko foreach: freqRows -->
-                      <tr>
-                        <th data-bind="text: $data" scope="row"></th>
-                        <!-- ko foreach: $root.freqColumns -->
-                          <td data-bind="text: $root.freqTable()[$data][$parentContext.$data]"></td>
-                        <!-- /ko -->
-                      </tr>
+                    <tr>
+                      <th data-bind="text: $data" scope="row"></th>
+                      <!-- ko foreach: $root.freqColumns -->
+                      <td data-bind="text: $root.freqTable()[$data][$parentContext.$data]"></td>
+                      <!-- /ko -->
+                    </tr>
                     <!-- /ko -->
                   </tbody>
                 </table>
                 <div class="m-2 border border-info rounded row">
-                  <p class="text-center my-2 col-md-6">Chi Cuadrada: 
+                  <p class="text-center my-2 col-md-6">Chi Cuadrada:
                     <span data-bind="text: x2"></span>
                   </p>
-                  <p class="text-center my-2 col-md-6">Coeficiente de Tschuprow: 
+                  <p class="text-center my-2 col-md-6">Coeficiente de Tschuprow:
                     <span data-bind="text: tschuprow"></span>
                   </p>
                 </div>
@@ -365,8 +360,7 @@
     <div class="tab-pane fade" id="nav-clean" data-bind="if: fileName">
       <div class="col-12">
         <div id="clean-data" class="container-fluid border border-dark rounded mt-4">
-          <select class="form-control my-2"
-            data-bind="options: attributeOptions,
+          <select class="form-control my-2" data-bind="options: attributeOptions,
             optionsText: 'name',
             value: attrToClean,
             optionsCaption: 'Seleccione Atributo'"></select>
@@ -375,18 +369,18 @@
             <div class="row p-2">
               <!-- *** Attribute Instances *** -->
               <div class="col-6 border-right border-info">
-                  <table class="table table-striped">
-                    <tbody data-bind="foreach: grid">
-                      <tr data-bind="if: $index() !== 0">
-                        <td class="p-1">
-                          <div data-bind="class: slots()[$root.attrToClean().index].status" 
-                            class="m-1 px-2 rounded" style="height: 28px;">
-                              <span data-bind="text: slots()[$root.attrToClean().index].value"></span>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <table class="table table-striped">
+                  <tbody data-bind="foreach: grid">
+                    <tr data-bind="if: $index() !== 0">
+                      <td class="p-1">
+                        <div data-bind="class: slots()[$root.attrToClean().index].status" class="m-1 px-2 rounded"
+                          style="height: 28px;">
+                          <span data-bind="text: slots()[$root.attrToClean().index].value"></span>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
 
               <!-- *** Actions *** -->
@@ -394,29 +388,28 @@
                 <!-- *** Numeric *** -->
                 <div class="row sticky-top pt-3" data-bind="if: attrToClean().type === 'numerico'">
                   <div class="col-12 p-2 text-center">
-                      <button type="button" class="btn btn-outline-primary" data-toggle="modal"
-                      data-target="#fillMissingValues-modal"
-                      onclick="fillMissingValuesClicked()">Llenar Valores Faltantes</button>
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                      data-target="#fillMissingValues-modal" onclick="fillMissingValuesClicked()">Llenar Valores
+                      Faltantes</button>
                   </div>
                   <div class="col-12 p-2 text-center">
-                    <button type="button" class="btn btn-outline-primary"
-                      onClick="">Deteccion y Correccion de Outliers</button>
+                    <button type="button" class="btn btn-outline-primary" onClick="">Deteccion y Correccion de
+                      Outliers</button>
                   </div>
                   <div class="col-12 p-2 text-center">
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal"
-                    data-target="#searchAndReplace-modal">Buscar y Reemplazar</button>
+                      data-target="#searchAndReplace-modal">Buscar y Reemplazar</button>
                   </div>
                   <div class="col-12 p-2 text-center">
-                    <button type="button" class="btn btn-outline-primary"
-                      onClick="">Normalizar</button>
+                    <button type="button" class="btn btn-outline-primary" onClick="">Normalizar</button>
                   </div>
                 </div>
                 <!-- *** Nominal *** -->
                 <div class="row sticky-top pt-3" data-bind="if: attrToClean().type === 'nominal'">
                   <div class="col-12 p-2 text-center">
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal"
-                      data-target="#fillMissingValues-modal"
-                      onclick="fillMissingValuesClicked()">Llenar Valores Faltantes</button>
+                      data-target="#fillMissingValues-modal" onclick="fillMissingValuesClicked()">Llenar Valores
+                      Faltantes</button>
                   </div>
                   <div class="col-12 p-2 text-center">
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal"
@@ -424,8 +417,8 @@
                   </div>
                   <div class="col-12 p-2 text-center">
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal"
-                      data-target="#fixTypos-modal"
-                      onclick="fixTyposClicked()">Detección de Errores Tipográficos</button>
+                      data-target="#fixTypos-modal" onclick="fixTyposClicked()">Detección de Errores
+                      Tipográficos</button>
                   </div>
                 </div>
               </div>
@@ -447,12 +440,13 @@
               <label class="mt-2">Valor</label>
               <input type="text" class="form-control mb-2 fill-with" />
               <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
-                  Recomendacion (<span data-bind="text: criteria"></span>): 
-                  <span data-bind="text: recommendation"></span>
+                Recomendacion (<span data-bind="text: criteria"></span>):
+                <span data-bind="text: recommendation"></span>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary" onClick="fillMissingValuesFromModal()">Llenar</button>
+              <button type="button" class="btn btn-outline-primary"
+                onClick="fillMissingValuesFromModal()">Llenar</button>
             </div>
           </div>
         </div>
@@ -473,13 +467,14 @@
               <input type="text" class="form-control mb-2 replace" />
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary" onClick="searchAndReplaceFromModal()">Reemplazar</button>
+              <button type="button" class="btn btn-outline-primary"
+                onClick="searchAndReplaceFromModal()">Reemplazar</button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- *** Fix Modal *** -->
+      <!-- *** Fix Typos Modal *** -->
       <div class="modal" id="fixTypos-modal">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -490,16 +485,22 @@
             <div id="fixTypos-body" class="modal-body">
               <label class="mt-2">Error -> Corrección</label>
               <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
+                <!-- ko ifnot: typos().length-->
+                <p class="my-2">No se encontraron errores tipográficos.</p>
+                <!-- /ko -->
                 <!-- ko foreach: typos -->
                 <p class="my-1">
-                  <span data-bind="text: $data"></span> -> 
+                  <span data-bind="text: $data"></span> ->
                   <span data-bind="text: $root.fixes()[$index()]"></span>
                 </p>
                 <!-- /ko -->
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary" onClick="fixTyposFromModal()">Corregir Errores</button>
+              <button type="button" class="btn btn-outline-primary" data-bind="disable: !typos().length"
+                onClick="fixTyposFromModal()">
+                Corregir Errores
+              </button>
             </div>
           </div>
         </div>
@@ -523,7 +524,7 @@
   <script src="js/EntradaDatos.js"></script>
   <script src="js/AnalisisEstadistico.js"></script>
   <script src="js/LimpiezaDatos.js"></script>
-  
+
 
 
   <script>
