@@ -8,13 +8,13 @@ function fillMissingValuesClicked() {
     data.sort();
 
     let sum = 0;
-    let firstMid = parseInt(data[Math.floor(data.length / 2)]);
-    let secondMid = parseInt(data[data.length / 2 - 1]);
+    let firstOpt = parseInt(data[Math.floor(data.length / 2)]);
+    let secondOpt = parseInt(data[Math.floor(data.length / 2) - 1]);
     for (let value of data) {
       sum += parseInt(value);
     }
     let avg = (sum / data.length).toFixed(2);
-    let med = (data.length % 2 === 0 ? (firstMid + secondMid) / 2 : firstMid);
+    let med = (data.length % 2 === 0 ? (firstOpt + secondOpt) / 2 : firstOpt);
 
     if(avg == med) {
       vm.criteria('Media');
@@ -57,30 +57,46 @@ function fixTyposClicked() {
       }
     }
     vm.fixes.push(fix);
-    console.log('typo: ' + typo);
-    console.log('fix: ' + fix);
   }
-
-  
 }
 
 function fixOutliersClicked() {
   let data = [];
   for (let i = 1; i < vm.grid().length; i++) {
-    data.push( vm.grid()[i].slots()[vm.attrToClean().index].value());
+    data.push( vm.grid()[i].slots()[vm.attrToClean().index].value() );
   }
   
   data.sort();
 
+  // Find outliers and recommendation
+  let firstOpt = parseInt(data[Math.floor(data.length / 2)]);
+  let secondOpt = parseInt(data[Math.floor(data.length / 2) - 1]);
+  let med = (data.length % 2 === 0 ? (firstOpt + secondOpt) / 2 : firstOpt);
+
+  firstOpt = parseInt(data[Math.floor(data.length / 4)]);
+  secondOpt = parseInt(data[Math.floor(data.length / 4) - 1]);
+  let q1 = (data.length % 4 === 0 ? (firstOpt + secondOpt) / 2 : firstOpt);
+
+  firstOpt = parseInt(data[Math.floor(data.length / 4 * 3)]);
+  secondOpt = parseInt(data[Math.floor(data.length / 4 * 3) - 1]);
+  let q3 = (data.length % 4 === 0 ? (firstOpt + secondOpt) / 2 : firstOpt);
+
+  let IQR = q3 - q1;
+
   let sum = 0;
-  let firstMid = parseInt(data[Math.floor(data.length / 2)]);
-  let secondMid = parseInt(data[data.length / 2 - 1]);
+  vm.outliers([]);
+  vm.possibleOutliers([]);
   for (let value of data) {
     sum += parseInt(value);
+    if (parseInt(value) < q1 - 3*IQR || parseInt(value) > q3 + 3*IQR) {
+      vm.outliers.push(parseInt(value));
+    }
+    else if (parseInt(value) < q1 - 1.5*IQR || parseInt(value) > q3 + 1.5*IQR) {
+      vm.possibleOutliers.push(parseInt(value));
+    }
   }
   let avg = (sum / data.length).toFixed(2);
-  let med = (data.length % 2 === 0 ? (firstMid + secondMid) / 2 : firstMid);
-
+  
   if(avg == med) {
     vm.criteria('Media');
     vm.recommendation(avg);
@@ -90,6 +106,7 @@ function fixOutliersClicked() {
     vm.recommendation(med);
   }
 }
+
 
 // Actions from Modals
 function fillMissingValuesFromModal() {

@@ -59,6 +59,8 @@ function DataViewModel() {
   self.recommendation = ko.observable('');
   self.typos = ko.observableArray([]);
   self.fixes = ko.observableArray([]);
+  self.outliers = ko.observableArray([]);
+  self.possibleOutliers = ko.observableArray([]);
 
   self.valueTypeOptions = ['nominal', 'numerico' /*, ordinal*/];
 

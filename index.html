@@ -518,13 +518,19 @@
               <div id="fixOutliers-body" class="modal-body">
                 <label class="mt-2">Posibles Outliers (1.5 IQR)</label>
                 <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
-                  23, 434
+                  <!-- ko ifnot: possibleOutliers-->
+                  <p class="my-2">No se encontraron posibles outliers</p>
+                  <!-- /ko -->
+                  <span data-bind="text: possibleOutliers().join(', ')"></span>
                 </div>
                 <label class="mt-2">Outliers (3 IQR)</label>
                 <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
-                  334, 24
+                  <!-- ko ifnot: outliers-->
+                  <p class="my-2">No se encontraron outliers</p>
+                  <!-- /ko -->
+                  <span data-bind="text: outliers().join(', ')"></span>
                 </div>
-                <label class="mt-2">Reemplazar con (3 IQR)</label>
+                <label class="mt-2">Reemplazar con</label>
                 <input type="text" class="form-control mb-2 replace" />
                 <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
                     Recomendacion (<span data-bind="text: criteria"></span>):
