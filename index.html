@@ -393,8 +393,9 @@
                       Faltantes</button>
                   </div>
                   <div class="col-12 p-2 text-center">
-                    <button type="button" class="btn btn-outline-primary" onClick="">Deteccion y Correccion de
-                      Outliers</button>
+                    <button type="button" class="btn btn-outline-primary" data-toggle="modal"
+                      data-target="#fixOutliers-modal"
+                      onClick="fixOutliersClicked()">Deteccion y Correccion de Outliers</button>
                   </div>
                   <div class="col-12 p-2 text-center">
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal"
@@ -505,6 +506,40 @@
           </div>
         </div>
       </div>
+
+      <!-- *** Fix Outliers Modal *** -->
+      <div class="modal" id="fixOutliers-modal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Detección y Correción de Outliers</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div id="fixOutliers-body" class="modal-body">
+                <label class="mt-2">Posibles Outliers (1.5 IQR)</label>
+                <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
+                  23, 434
+                </div>
+                <label class="mt-2">Outliers (3 IQR)</label>
+                <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
+                  334, 24
+                </div>
+                <label class="mt-2">Reemplazar con (3 IQR)</label>
+                <input type="text" class="form-control mb-2 replace" />
+                <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
+                    Recomendacion (<span data-bind="text: criteria"></span>):
+                    <span data-bind="text: recommendation"></span>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary"
+                  onClick="fixOutliersFromModal()">Todos</button>
+                <button type="button" class="btn btn-outline-primary"
+                  onClick="fixOutliersFromModal()">Solo 3 IQR</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
     </div>
 

@@ -17,12 +17,12 @@ function fillMissingValuesClicked() {
     let med = (data.length % 2 === 0 ? (firstMid + secondMid) / 2 : firstMid);
 
     if(avg == med) {
-      vm.criteria('Mediana');
-      vm.recommendation(med);
-    }
-    else {
       vm.criteria('Media');
       vm.recommendation(avg);
+    }
+    else {
+      vm.criteria('Mediana');
+      vm.recommendation(med);
     }
   }
   else {
@@ -64,6 +64,34 @@ function fixTyposClicked() {
   
 }
 
+function fixOutliersClicked() {
+  let data = [];
+  for (let i = 1; i < vm.grid().length; i++) {
+    data.push( vm.grid()[i].slots()[vm.attrToClean().index].value());
+  }
+  
+  data.sort();
+
+  let sum = 0;
+  let firstMid = parseInt(data[Math.floor(data.length / 2)]);
+  let secondMid = parseInt(data[data.length / 2 - 1]);
+  for (let value of data) {
+    sum += parseInt(value);
+  }
+  let avg = (sum / data.length).toFixed(2);
+  let med = (data.length % 2 === 0 ? (firstMid + secondMid) / 2 : firstMid);
+
+  if(avg == med) {
+    vm.criteria('Media');
+    vm.recommendation(avg);
+  }
+  else {
+    vm.criteria('Mediana');
+    vm.recommendation(med);
+  }
+}
+
+// Actions from Modals
 function fillMissingValuesFromModal() {
   let fillWith = document.querySelector('#fillMissingValues-body .fill-with').value;
   vm.fillMissingValues(fillWith);    
@@ -79,6 +107,7 @@ function fixTyposFromModal() {
   vm.fixTypos();
 }
 
+// Util
 function levenshteinDistance(s1, len1, s2, len2) {
   let cost;
   if (len1 === 0) return len2;
