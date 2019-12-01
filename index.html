@@ -403,7 +403,7 @@
                   </div>
                   <div class="col-12 p-2 text-center">
                     <button type="button" class="btn btn-outline-primary" data-toggle="modal"
-                    data-target="#normalize-modal">Normalizar</button>
+                      data-target="#normalize-modal">Normalizar</button>
                   </div>
                 </div>
                 <!-- *** Nominal *** -->
@@ -559,14 +559,18 @@
               <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div id="normalize-body" class="modal-body">
+              <label class="mt-2">Tipo de Normalización</label>
+              <select class="form-control" data-bind="options: normalizeOptions, 
+                value: normalizeType"></select>
+              <!-- ko if: normalizeType() == 'Min-Max' -->
               <label class="mt-2">Nuevo Mínimo</label>
               <input type="text" class="form-control mb-2 new-min" value="0" />
               <label class="mt-2">Nuevo Máximo</label>
               <input type="text" class="form-control mb-2 new-max" value="1" />
+              <!-- /ko -->
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary"
-                onClick="normalizeFromModal()">Normalizar</button>
+              <button type="button" class="btn btn-outline-primary" onClick="normalizeFromModal()">Normalizar</button>
             </div>
           </div>
         </div>

@@ -61,7 +61,13 @@ function DataViewModel() {
   self.fixes = ko.observableArray([]);
   self.outliers = ko.observableArray([]);
   self.possibleOutliers = ko.observableArray([]);
+  self.normalizeType = ko.observable('Min-Max');
 
+  self.normalizeOptions = [
+    'Min-Max', 
+    'Z-score (Desviación Estandar)', 
+    'Z-score (Desviación Media Absoluta)'
+  ];
   self.valueTypeOptions = ['nominal', 'numerico' /*, ordinal*/];
 
   // *** Computed values ***
@@ -286,7 +292,7 @@ function DataViewModel() {
     }, 0);
   }
 
-  self.normilize = function (newMin, newMax) {
+  self.normalize = function (newMin, newMax) {
     $('#normalize-modal').modal('hide');
     showLoading();
     setTimeout(() => {
@@ -304,6 +310,19 @@ function DataViewModel() {
       for (let i = 1; i < self.grid().length; i++) {
         let currentValue = parseFloat(self.grid()[i].slots()[self.attrToClean().index].value());
         let newValue = ((currentValue - minVal)/(maxVal - minVal)) * (newMax - newMin) + newMin;
+        self.grid()[i].slots()[self.attrToClean().index].value(newValue.toFixed(4));
+      }
+      hideLoading();
+    }, 0);
+  }
+
+  self.zScore = function (desv, avg) {
+    $('#normalize-modal').modal('hide');
+    showLoading();
+    setTimeout(() => {
+      for (let i = 1; i < self.grid().length; i++) {
+        let currentValue = parseFloat(self.grid()[i].slots()[self.attrToClean().index].value());
+        let newValue = (currentValue - avg) / desv;
         self.grid()[i].slots()[self.attrToClean().index].value(newValue.toFixed(4));
       }
       hideLoading();

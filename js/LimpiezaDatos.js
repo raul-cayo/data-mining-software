@@ -1,9 +1,9 @@
 function fillMissingValuesClicked() {
   let data = [];
   for (let i = 1; i < vm.grid().length; i++) {
-    data.push( vm.grid()[i].slots()[vm.attrToClean().index].value());
+    data.push(vm.grid()[i].slots()[vm.attrToClean().index].value());
   }
-  
+
   if (vm.attrToClean().type === 'numerico') {
     data.sort();
 
@@ -16,7 +16,7 @@ function fillMissingValuesClicked() {
     let avg = (sum / data.length).toFixed(2);
     let med = (data.length % 2 === 0 ? (firstOpt + secondOpt) / 2 : firstOpt);
 
-    if(avg == med) {
+    if (avg == med) {
       vm.criteria('Media');
       vm.recommendation(avg);
     }
@@ -39,19 +39,19 @@ function fixTyposClicked() {
   let currentSlot;
   for (let i = 1; i < vm.grid().length; i++) {
     currentSlot = vm.grid()[i].slots()[vm.attrToClean().index];
-    if(!uniqueData.includes(currentSlot.value()) && !currentSlot.status()) {
+    if (!uniqueData.includes(currentSlot.value()) && !currentSlot.status()) {
       uniqueData.push(currentSlot.value());
-    } else if (currentSlot.status() === 'border border-danger' 
+    } else if (currentSlot.status() === 'border border-danger'
       && !vm.typos().includes(currentSlot.value())) {
       vm.typos.push(currentSlot.value());
     }
   }
 
-  for(let typo of vm.typos()) {
+  for (let typo of vm.typos()) {
     let min = getLevenshteinDistance(typo, uniqueData[0]);
     let fix = uniqueData[0];
     for (let data of uniqueData) {
-      if(getLevenshteinDistance(typo, data) < min) {
+      if (getLevenshteinDistance(typo, data) < min) {
         min = getLevenshteinDistance(typo, data);
         fix = data;
       }
@@ -63,9 +63,9 @@ function fixTyposClicked() {
 function fixOutliersClicked() {
   let data = [];
   for (let i = 1; i < vm.grid().length; i++) {
-    data.push( vm.grid()[i].slots()[vm.attrToClean().index].value() );
+    data.push(vm.grid()[i].slots()[vm.attrToClean().index].value());
   }
-  
+
   data.sort();
 
   // Find outliers and recommendation
@@ -88,16 +88,16 @@ function fixOutliersClicked() {
   vm.possibleOutliers([]);
   for (let value of data) {
     sum += parseInt(value);
-    if (parseInt(value) < q1 - 3*IQR || parseInt(value) > q3 + 3*IQR) {
+    if (parseInt(value) < q1 - 3 * IQR || parseInt(value) > q3 + 3 * IQR) {
       vm.outliers.push(parseInt(value));
     }
-    else if (parseInt(value) < q1 - 1.5*IQR || parseInt(value) > q3 + 1.5*IQR) {
+    else if (parseInt(value) < q1 - 1.5 * IQR || parseInt(value) > q3 + 1.5 * IQR) {
       vm.possibleOutliers.push(parseInt(value));
     }
   }
   let avg = (sum / data.length).toFixed(2);
-  
-  if(avg == med) {
+
+  if (avg == med) {
     vm.criteria('Media');
     vm.recommendation(avg);
   }
@@ -111,7 +111,7 @@ function fixOutliersClicked() {
 // Actions from Modals
 function fillMissingValuesFromModal() {
   let fillWith = document.querySelector('#fillMissingValues-body .fill-with').value;
-  vm.fillMissingValues(fillWith);    
+  vm.fillMissingValues(fillWith);
 }
 
 function searchAndReplaceFromModal() {
@@ -130,10 +130,43 @@ function fixOutliersFromModal(all) {
 }
 
 function normalizeFromModal() {
-  let newMin = document.querySelector('#normalize-body .new-min').value;
-  let newMax = document.querySelector('#normalize-body .new-max').value;
-  if(newMin && newMax) {
-    vm.normilize(parseFloat(newMin), parseFloat(newMax));
+  if (vm.normalizeType() == 'Min-Max') {
+    let newMin = document.querySelector('#normalize-body .new-min').value;
+    let newMax = document.querySelector('#normalize-body .new-max').value;
+    if (newMin && newMax) {
+      vm.normalize(parseFloat(newMin), parseFloat(newMax));
+    }
+  }
+  else {
+    let data = [];
+    for (let i = 1; i < vm.grid().length; i++) {
+      data.push(vm.grid()[i].slots()[vm.attrToClean().index].value());
+    }
+
+    let sum = 0;
+    for (let i = 0; i < data.length; i++) {
+      sum += parseFloat(data[i]);
+    }
+    let avg = sum / data.length;
+    let desv;
+    // Desviacion Estandar
+    if (vm.normalizeType() == 'Z-score (Desviación Estandar)') {
+      let xMinusAvg2Sum = 0;
+      for (let i = 0; i < data.length; i++) {
+        xMinusAvg2Sum += (data[i] - avg) * (data[i] - avg);
+      }
+      desv = Math.sqrt(xMinusAvg2Sum / data.length);
+    } // Desviacion Media Absoluta
+    else {
+      let xMinusAvgSum = 0;
+      for (let i = 0; i < data.length; i++) {
+        let abs = (data[i] - avg) < 0 ? (data[i] - avg)*-1 : (data[i] - avg);
+        xMinusAvgSum += abs;
+      }
+      desv = xMinusAvgSum / data.length;
+    }
+    console.log(desv);
+    vm.zScore(desv, avg);
   }
 }
 
