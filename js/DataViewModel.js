@@ -38,7 +38,8 @@ function DataViewModel() {
   self.relation = ko.observable('');
   self.generalInfo = ko.observable('');
   self.nullChar = ko.observable('');
-
+  self.sampleInstances = ko.observable('1');
+  
   self.univariate = ko.observable('');
   self.uniAvg = ko.observable('');
   self.uniMed = ko.observable('');
@@ -108,6 +109,11 @@ function DataViewModel() {
       }
     }
     return attrArray;
+  }, self);
+
+  self.samplePercent = ko.pureComputed(function () {
+    let percent = self.sampleInstances() * 100 / self.noInstances();
+    return percent.toFixed(2);
   }, self);
 
   // *** Functions ***

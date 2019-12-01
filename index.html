@@ -167,6 +167,8 @@
             data-bind="enable: fileName">Guardar</button>
           <button type="button" class="btn btn-outline-success mx-2" data-toggle="modal" data-target="#saveAs-modal"
             data-bind="enable: fileName">Guardar Como</button>
+          <button type="button" class="btn btn-outline-success mx-2" data-toggle="modal" data-target="#saveSample-modal"
+            data-bind="enable: fileName">Guardar Muestra</button>
         </div>
       </div>
 
@@ -239,19 +241,40 @@
         </div>
       </div>
 
-      <!-- *** Loading Modal *** -->
-      <div class="modal" id="loading-modal">
+      <!-- *** Save Sample Modal *** -->
+      <div class="modal" id="saveSample-modal">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Cargando...</h4>
+              <h4 class="modal-title">Guardar Muestra</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-            <div class="modal-body d-flex justify-content-center">
-              <img src="images/loading.gif" alt="Loading.gif">
+            <div id="saveSample-body" class="modal-body">
+              <label class="mt-2">Nombre del archivo</label>
+              <input type="text" class="form-control mb-2" />
+              <label class="mt-2">Formato del archivo</label>
+              <select class="form-control">
+                <option value=".csv">CSV</option>
+                <option value=".data">Data</option>
+              </select>
+              <label class="mt-2">Tamaño de la Muestra (Instancias)</label>
+              <input type="text" class="form-control mb-2" data-bind="textInput: sampleInstances" />
+              <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
+                Porcentaje: <span data-bind="text: samplePercent"></span>%
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-primary" onClick="saveSampleFromModal(true)">
+                Con Remplazo
+              </button>
+              <button type="button" class="btn btn-outline-primary" onClick="saveSampleFromModal(false)">
+                Sin Remplazo
+              </button>
             </div>
           </div>
         </div>
       </div>
+
     </div>
 
     <!-- ***** ANALISIS ESTADISTICO ***** -->
@@ -580,6 +603,20 @@
 
     <!-- *** Other sections *** -->
     <div class="tab-pane fade" id="nav-learning">Aprendizaje Máquina</div>
+
+    <!-- *** Loading Modal *** -->
+    <div class="modal" id="loading-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Cargando...</h4>
+          </div>
+          <div class="modal-body d-flex justify-content-center">
+            <img src="images/loading.gif" alt="Loading.gif">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="vendors/jquery.min.js"></script>
