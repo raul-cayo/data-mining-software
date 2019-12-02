@@ -92,6 +92,57 @@ function saveFile(fileName, fileExt) {
   saveAs(blob, fileName + fileExt);
 }
 
+function saveSample(fileName, fileExt, noInstances, withReplace) {
+  let data = [];
+  let sample = [];
+  for (let row of vm.grid()) {
+    let slotsArray = [];
+    for (let slot of row.slots()) {
+      slotsArray.push(slot.value());
+    }
+    data.push(slotsArray);
+  }
+
+  let random
+  if(withReplace) {
+    sample[0] = data[0];
+    while (sample.length <= noInstances) {
+      random = Math.floor(Math.random() * (data.length - 1)) + 1;
+      sample.push(data[random]);
+    }
+  }
+  else {
+    sample = [...data];
+    while (sample.length > noInstances + 1) {
+      random = Math.floor(Math.random() * (sample.length - 1)) + 1;
+      sample.splice(random, 1);
+    }
+  }
+
+  let fileContent = '';
+  if (fileExt === '.csv') {
+    fileContent = Papa.unparse(sample, {newline: '\n'});
+  }
+  else if (fileExt === '.data') {
+    const gridHead = sample.shift();
+    fileContent += (vm.generalInfo() + '\n');
+    fileContent += ('@relation ' + vm.relation() + '\n');
+
+    for (var i = 0; i < vm.attributesInfo().length; i++) {
+      fileContent += ('@attribute '
+        + gridHead[i] + ' '
+        + vm.attributesInfo()[i].type() + ' '
+        + vm.attributesInfo()[i].regex() + '\n');
+    }
+
+    fileContent += ('@missingValue ' + vm.nullChar() + '\n\n');
+    fileContent += '@data\n';
+    fileContent += Papa.unparse(sample, {newline: '\n'});
+  }
+  let blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
+  saveAs(blob, fileName + fileExt);
+}
+
 function saveFileFromModal() {
   let fileName = document.querySelector('#saveAs-body input').value;
   let fileExt = document.querySelector('#saveAs-body select').value;
@@ -101,6 +152,27 @@ function saveFileFromModal() {
   } else {
     saveFile(fileName, fileExt);
     document.querySelector('#saveAs-body input').classList.add('border', 'border-success');
+  }
+}
+
+function saveSampleFromModal(withReplace) {
+  let fileName = document.querySelector('#saveSample-body .file-name').value;
+  let fileExt = document.querySelector('#saveSample-body select').value;
+  let instances = document.querySelector('#saveSample-body .instances').value;
+
+  if (!fileName) {
+    document.querySelector('#saveSample-body .file-name').classList.add('border', 'border-danger');
+    document.querySelector('#saveSample-body .instances').classList.remove('border', 'border-danger');
+  }
+  else if (parseInt(instances) > 0 && parseInt(instances) <= vm.noInstances()) {
+    saveSample(fileName, fileExt, parseInt(instances), withReplace);
+    console.log(fileName + fileExt + instances + withReplace);
+    document.querySelector('#saveSample-body .instances').classList.remove('border', 'border-danger');
+    document.querySelector('#saveSample-body .file-name').classList.remove('border', 'border-danger');
+  }
+  else {
+    document.querySelector('#saveSample-body .instances').classList.add('border', 'border-danger');
+    document.querySelector('#saveSample-body .file-name').classList.remove('border', 'border-danger');
   }
 }
 

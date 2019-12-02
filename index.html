@@ -251,14 +251,14 @@
             </div>
             <div id="saveSample-body" class="modal-body">
               <label class="mt-2">Nombre del archivo</label>
-              <input type="text" class="form-control mb-2" />
+              <input type="text" class="form-control mb-2 file-name" />
               <label class="mt-2">Formato del archivo</label>
               <select class="form-control">
                 <option value=".csv">CSV</option>
                 <option value=".data">Data</option>
               </select>
               <label class="mt-2">Tamaño de la Muestra (Instancias)</label>
-              <input type="text" class="form-control mb-2" data-bind="textInput: sampleInstances" />
+              <input type="text" class="form-control mb-2 instances" data-bind="textInput: sampleInstances" />
               <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
                 Porcentaje: <span data-bind="text: samplePercent"></span>%
               </div>
