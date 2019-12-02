@@ -6,7 +6,7 @@ function Slot(value, regex) {
   self.regex = ko.observable(regex);
 
   self.status = ko.pureComputed(function () {
-    if (self.value() === vm.nullChar()){
+    if (self.value() === vm.nullChar()) {
       return 'border border-warning';
     }
     return self.value().match(new RegExp(self.regex())) ? '' : 'border border-danger';
@@ -39,7 +39,7 @@ function DataViewModel() {
   self.generalInfo = ko.observable('');
   self.nullChar = ko.observable('');
   self.sampleInstances = ko.observable('1');
-  
+
   self.univariate = ko.observable('');
   self.uniAvg = ko.observable('');
   self.uniMed = ko.observable('');
@@ -64,9 +64,13 @@ function DataViewModel() {
   self.possibleOutliers = ko.observableArray([]);
   self.normalizeType = ko.observable('Min-Max');
 
+  self.classAttr = ko.observable('');
+  self.result = ko.observable('');
+  self.zeroRClasses = ko.observableArray([]);
+
   self.normalizeOptions = [
-    'Min-Max', 
-    'Z-score (Desviación Estandar)', 
+    'Min-Max',
+    'Z-score (Desviación Estandar)',
     'Z-score (Desviación Media Absoluta)'
   ];
   self.valueTypeOptions = ['nominal', 'numerico' /*, ordinal*/];
@@ -99,13 +103,29 @@ function DataViewModel() {
 
   self.attributeOptions = ko.pureComputed(function () {
     let attrArray = []
-    if(self.grid()[0]){
+    if (self.grid()[0]) {
       for (let i = 0; i < self.grid()[0].slots().length; i++) {
         attrArray.push({
-          index: i, 
+          index: i,
           name: self.grid()[0].slots()[i].value(),
           type: self.attributesInfo()[i].type()
         });
+      }
+    }
+    return attrArray;
+  }, self);
+
+  self.classOptions = ko.pureComputed(function () {
+    let attrArray = []
+    if (self.grid()[0]) {
+      for (let i = 0; i < self.grid()[0].slots().length; i++) {
+        if (self.attributesInfo()[i].type() === 'nominal') {
+          attrArray.push({
+            index: i,
+            name: self.grid()[0].slots()[i].value(),
+            type: self.attributesInfo()[i].type()
+          });
+        }
       }
     }
     return attrArray;
@@ -213,7 +233,7 @@ function DataViewModel() {
       for (let i = 1; i < self.grid().length; i++) {
         self.grid()[i].slots.push(new Slot(defaultValue, regex));
       }
-      
+
       self.attributesInfo.push(new AttributeInfo(regex, type));
       self.grid()[0].slots.push(new Slot(name, regex));
       hideLoading();
@@ -273,8 +293,8 @@ function DataViewModel() {
     showLoading();
     setTimeout(() => {
       for (let i = 1; i < self.grid().length; i++) {
-        for (let j = 0; j < self.typos().length; j++){
-          if(self.grid()[i].slots()[self.attrToClean().index].value() === self.typos()[j]) {
+        for (let j = 0; j < self.typos().length; j++) {
+          if (self.grid()[i].slots()[self.attrToClean().index].value() === self.typos()[j]) {
             self.grid()[i].slots()[self.attrToClean().index].value(self.fixes()[j]);
             break;
           }
@@ -290,7 +310,7 @@ function DataViewModel() {
     setTimeout(() => {
       for (let i = 1; i < self.grid().length; i++) {
         let currentValue = parseInt(self.grid()[i].slots()[self.attrToClean().index].value());
-        if ( self.outliers().includes(currentValue) || (all && self.possibleOutliers().includes(currentValue)) ) {
+        if (self.outliers().includes(currentValue) || (all && self.possibleOutliers().includes(currentValue))) {
           self.grid()[i].slots()[self.attrToClean().index].value(replaceVal);
         }
       }
@@ -312,10 +332,10 @@ function DataViewModel() {
           maxVal = parseFloat(self.grid()[i].slots()[self.attrToClean().index].value());
         }
       }
-        
+
       for (let i = 1; i < self.grid().length; i++) {
         let currentValue = parseFloat(self.grid()[i].slots()[self.attrToClean().index].value());
-        let newValue = ((currentValue - minVal)/(maxVal - minVal)) * (newMax - newMin) + newMin;
+        let newValue = ((currentValue - minVal) / (maxVal - minVal)) * (newMax - newMin) + newMin;
         self.grid()[i].slots()[self.attrToClean().index].value(newValue.toFixed(4));
       }
       hideLoading();
@@ -330,6 +350,41 @@ function DataViewModel() {
         let currentValue = parseFloat(self.grid()[i].slots()[self.attrToClean().index].value());
         let newValue = (currentValue - avg) / desv;
         self.grid()[i].slots()[self.attrToClean().index].value(newValue.toFixed(4));
+      }
+      hideLoading();
+    }, 0);
+  }
+
+  self.zeroR = function (noInstances) {
+    $('#zeroR-modal').modal('hide');
+    showLoading();
+    setTimeout(() => {
+      let sample = [];
+      let frequency = {};
+      let maxFreq = 0;
+      for (let i = 1; i < vm.grid().length; i++) {
+        sample.push(vm.grid()[i].slots()[vm.classAttr().index].value());
+      }
+
+      let random;
+      while (sample.length > noInstances) {
+        random = Math.floor(Math.random() * sample.length);
+        sample.splice(random, 1);
+      }
+
+      for (let inst of sample) {
+        frequency[inst] = (frequency[inst] || 0) + 1;
+
+        if (frequency[inst] > maxFreq) {
+          maxFreq = frequency[inst];
+        }
+      }
+
+      let percent = maxFreq * 100 / sample.length;
+      for (let inst in frequency) {
+        if (frequency[inst] == maxFreq) {
+          self.result(inst + ' -> ' + percent.toFixed(2) + '%');
+        }
       }
       hideLoading();
     }, 0);

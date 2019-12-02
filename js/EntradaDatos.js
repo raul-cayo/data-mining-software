@@ -166,7 +166,6 @@ function saveSampleFromModal(withReplace) {
   }
   else if (parseInt(instances) > 0 && parseInt(instances) <= vm.noInstances()) {
     saveSample(fileName, fileExt, parseInt(instances), withReplace);
-    console.log(fileName + fileExt + instances + withReplace);
     document.querySelector('#saveSample-body .instances').classList.remove('border', 'border-danger');
     document.querySelector('#saveSample-body .file-name').classList.remove('border', 'border-danger');
   }
