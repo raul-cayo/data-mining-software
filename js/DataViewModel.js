@@ -65,9 +65,18 @@ function DataViewModel() {
   self.normalizeType = ko.observable('Min-Max');
 
   self.classAttr = ko.observable('');
-  self.result = ko.observable('');
+  self.result = ko.observable('Aqui se mostrará el resultado...');
+  self.exactitud = ko.observable('');
+  self.sensibilidad = ko.observable('');
+  self.especificidad = ko.observable('');
   self.zeroRClasses = ko.observableArray([]);
+  self.validationType = ko.observable('Hold-out');
+  self.kValue = ko.observable('4');
 
+  self.validationOptions = [
+    'Hold-out',
+    'K-fold Cross Validation'
+  ];
   self.normalizeOptions = [
     'Min-Max',
     'Z-score (Desviación Estandar)',
@@ -355,39 +364,60 @@ function DataViewModel() {
     }, 0);
   }
 
-  self.zeroR = function (noInstances) {
+  self.zeroR = function () {
     $('#zeroR-modal').modal('hide');
     showLoading();
-    setTimeout(() => {
-      let sample = [];
-      let frequency = {};
-      let maxFreq = 0;
-      for (let i = 1; i < vm.grid().length; i++) {
-        sample.push(vm.grid()[i].slots()[vm.classAttr().index].value());
-      }
+    let strResult = '';
 
-      let random;
-      while (sample.length > noInstances) {
-        random = Math.floor(Math.random() * sample.length);
-        sample.splice(random, 1);
-      }
-
-      for (let inst of sample) {
-        frequency[inst] = (frequency[inst] || 0) + 1;
-
-        if (frequency[inst] > maxFreq) {
-          maxFreq = frequency[inst];
+    if (self.validationType() === 'Hold-out') {
+      setTimeout(() => {
+        let sample = [];
+        let test = [];
+        let frequency = {};
+        let maxFreq = 0;
+        let maxClass;
+        for (let i = 1; i < vm.grid().length; i++) {
+          sample.push(vm.grid()[i].slots()[vm.classAttr().index].value());
         }
-      }
 
-      let percent = maxFreq * 100 / sample.length;
-      for (let inst in frequency) {
-        if (frequency[inst] == maxFreq) {
-          self.result(inst + ' -> ' + percent.toFixed(2) + '%');
+        let random;
+        while (sample.length > self.sampleInstances()) {
+          random = Math.floor(Math.random() * sample.length);
+          test.push(sample.splice(random, 1));
         }
-      }
-      hideLoading();
-    }, 0);
+
+        for (let inst of sample) {
+          frequency[inst] = (frequency[inst] || 0) + 1;
+
+          if (frequency[inst] > maxFreq) {
+            maxFreq = frequency[inst];
+            maxClass = inst;
+          }
+        }
+
+        let percent = maxFreq * 100 / sample.length;
+        strResult += (maxClass + ' -> ' + percent.toFixed(2) + '%\n\n');
+        
+        let positive = 0;
+        for(let instance of test) {
+          if(instance == maxClass) {
+            positive++;
+          }
+        }
+        let exactitud = (positive / test.length).toFixed(2);
+        self.exactitud(exactitud);
+        self.sensibilidad(exactitud);
+        self.especificidad(0);
+
+        self.result(strResult);
+        console.log(strResult);
+
+        hideLoading();
+      }, 0);
+    }
+    else {
+      // k-fold validation
+    }
   }
 
 }

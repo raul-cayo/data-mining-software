@@ -1,6 +1,16 @@
-function zeroRFromModal() {
-  let noInstances = document.querySelector('#zeroR-body .instances').value;
+function executeAlgorithm() {
+  let algorithm = document.querySelector('#algorithms .algorithm').value;
+
   if (vm.classAttr()) {
-    vm.zeroR(parseInt(noInstances));
+    if (algorithm == '1') { // ZeroR
+      console.log('test');
+      vm.zeroR();
+    } 
+    else if (algorithm === '2') { // OneR
+
+    }
+    else if (algorithm === '3') { // Naive Bayes
+      
+    }
   }
 }

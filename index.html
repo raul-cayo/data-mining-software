@@ -608,15 +608,45 @@
         <!-- *** Algorithms *** -->
         <div class="col-12 col-md-6">
           <h3 class="mt-3 text-center">Algoritmos</h3>
-          <div id="univariate" class="container-fluid border border-dark rounded">
-            <div class="col-12 p-2 text-center">
-              <button type="button" class="btn btn-outline-primary" data-toggle="modal"
-                data-target="#zeroR-modal">ZeroR</button>
+          <div id="algorithms" class="container-fluid border border-dark rounded">
+
+            <label class="mt-3">Atributo Clase</label>
+            <select class="form-control" data-bind="options: classOptions,
+              optionsText: 'name', value: classAttr,
+              optionsCaption: 'Seleccione la Clase'">
+            </select>
+
+            <label class="mt-2">Algoritmo</label>
+            <select class="form-control algorithm">
+              <option value="1">ZeroR</option>
+              <option value="2">OneR</option>
+              <option value="3">Naive Bayes</option>
+            </select>
+
+            <label class="mt-2">Metodologias de Validación</label>
+            <select class="form-control" data-bind="options: validationOptions,
+              value: validationType">
+            </select>
+
+            <!-- ko if: validationType() === 'Hold-out' -->
+            <label class="mt-2">Instancias de Entrenamiento</label>
+            <input type="text" class="form-control mb-2" data-bind="textInput: sampleInstances" />
+            <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1 mb-2">
+              Porcentaje: <span data-bind="text: samplePercent"></span>%
             </div>
-            <div class="col-12 p-2 text-center">
-              <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#oneR-modal"
-                onClick="oneRClicked()">OneR</button>
+            <!-- /ko -->
+
+            <!-- ko if: validationType() === 'K-fold Cross Validation' -->
+            <label class="mt-2">Valor de K</label>
+            <input type="text" class="form-control mb-2" data-bind="textInput: kValue" />
+            <!-- /ko -->
+
+           
+            <div class="col-12 p-2 text-center mb-3">
+              <button type="button" class="btn btn-outline-primary"
+                onClick="executeAlgorithm()">Ejecutar</button>
             </div>
+
           </div>
         </div>
 
@@ -624,39 +654,20 @@
         <div class="col-12 col-md-6">
           <h3 class="mt-3 text-center">Resultados</h3>
           <div id="univariate" class="container-fluid border border-dark rounded">
-            <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1 m-2">
-              <span data-bind="text: result"></span>
+            <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1 my-3">
+              <p><span data-bind="text: result"></span></p>
+              <br />
+              <!-- ko if: exactitud-->
+              <p>Resultado de la Validación: </p>
+              <p>Exactitud: <span data-bind="text: exactitud"></span></p>
+              <p>Sensibilidad: <span data-bind="text: sensibilidad"></span></p>
+              <p>Especificidad: <span data-bind="text: especificidad"></span></p>
+              <!-- /ko -->
             </div>
           </div>
         </div>
       </div>
 
-      <!-- *** ZeroR Modal *** -->
-      <div class="modal" id="zeroR-modal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">ZeroR</h4>
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div id="zeroR-body" class="modal-body">
-              <select class="form-control my-2" data-bind="options: classOptions,
-                optionsText: 'name', value: classAttr,
-                optionsCaption: 'Seleccione la Clase'"></select>
-              <label class="mt-2">Tamaño de la Muestra (Instancias)</label>
-              <input type="text" class="form-control mb-2 instances" data-bind="textInput: sampleInstances" />
-              <div class="border border-info text-info rounded bg-light px-2 pt-0 pb-1">
-                Porcentaje: <span data-bind="text: samplePercent"></span>%
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-outline-primary" onClick="zeroRFromModal(true)">
-                Aplicar
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- *** Loading Modal *** -->
